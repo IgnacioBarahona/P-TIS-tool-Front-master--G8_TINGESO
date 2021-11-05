@@ -5,7 +5,7 @@
       <div id="init-container" class="columns is-vcentered is-fullheight">
         <img src="@/assets/images/eao-usach.png" class="is-tablet" style="z-index: 1" alt="Patio EAO"/>
         <div class="column is-3" style="z-index: 999"></div>
-        <div class="column is-6 bg-semitransparent px-5 py-5" style="z-index: 999">
+        <div class="column is-6 bg-semitransparent px-5 py-5" style="z-index: 999" @keyup.enter=disteClick>
           <div class="title is-2">Módulo de minutas de reunión</div>
           <div class="subtitle is-5 my-3">
             <p>Herramienta de apoyo a las actividades de desarrollo de proyectos de software de los cursos Proyecto y Taller de Ingeniería de Software</p>
