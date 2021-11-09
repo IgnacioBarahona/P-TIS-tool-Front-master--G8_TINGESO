@@ -5,11 +5,27 @@
     <SelectorJornada/>
 
     <div class="columns">
-      <div class="column is-10"></div>
+      <div class="column is-8"></div>
       <div class="column is-2" v-if="verFormulario"></div>
       <div class="column is-2" v-else>
         <button class="button is-info-usach" @click="agregarGrupo">Agregar Grupo</button>
       </div>
+      <div class="column is-2">
+         <button class="button is-info-usach" @click="modalAyuda.classList.toggle('is-active')">
+           <span class="icon">
+            <i class="fas fa-question-circle"></i>
+           </span>
+          </button>
+      </div>
+    </div>
+    <!-- Modal para ayuda -->
+    <div id="modalAyuda" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <!-- Any other Bulma elements you want -->
+        hola
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
     </div>
 
     <div v-if="verFormulario">
@@ -156,7 +172,8 @@ export default {
         mensaje: '¿Confirma la eliminación del grupo?'
       },
       actualizarGrupo: false,
-      idGrupo: 0
+      idGrupo: 0,
+      mostrarAyuda: false
     }
   },
   computed: {
