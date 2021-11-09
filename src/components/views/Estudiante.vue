@@ -1,6 +1,23 @@
 <template>
   <div class="has-text-left">
 
+    <div class="modal" :class="help ? 'is-active': ''" >
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title title is-4">Preguntas Frecuentes del uso de la herramienta</p>
+          <button class="delete" aria-label="close" @click="modificarModal"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="content" v-for="faq in faqs" :key="faq.id">
+            <h2 class="title is-5">{{faq.pregunta}}</h2>
+            <p>{{faq.respuesta}}</p>
+          </div>
+          <!-- Content ... -->
+        </section>
+      </div>
+    </div>
+
     <div v-if="crearMinuta">
 
       <Minuta :tipo-minuta="tipo" :id-bitacora="idBitacora" :id-motivo="idMotivo" :re-emitir="esNuevaEmision" :letra-revision="nuevaRevision" :estado="revisionEstado" v-if="verFormulario" @cerrar="cerrarFormulario"/>
@@ -12,7 +29,10 @@
       <div v-else>
 
         <div class="columns">
-          <div class="column is-10"></div>
+          <div class="column is-9"></div>
+          <div class="column is-1">
+            <button class="button is-light-usach" @click="modificarModal" >Ayuda</button>
+          </div>
           <div class="column is-2">
             <button class="button is-info-usach" @click="nuevaMinuta">Nueva Minuta</button>
           </div>
@@ -131,6 +151,7 @@ export default {
       idRespuestas: 0,
       idEmision: 0,
       idVerMinuta: 0,
+      help: false,
       crearMinuta: true,
       verRevision: false,
       verComentarios: false,
@@ -149,7 +170,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'tipoMinutas', 'usuario', 'estudiante', 'grupo', 'motivos']),
+    ...mapState(['apiUrl', 'tipoMinutas', 'usuario', 'estudiante', 'grupo', 'motivos', 'faqs']),
 
     minutasFiltradas: function () {
       var lista = []
@@ -227,6 +248,14 @@ export default {
         this.$store.commit('setMotivos', response.data)
       } catch {
         console.log('No fue posible obtener los motivos de emisión')
+      }
+    },
+    async obtenerFaqs () {
+      try {
+        const response = await axios.get(this.apiUrl + '/faqs', { headers: Auth.authHeader() })
+        this.$store.commit('setFaqs', response.data)
+      } catch {
+        console.log('No fue posible obtener las faqs')
       }
     },
     cambiarTab: function () {
@@ -324,6 +353,13 @@ export default {
     },
     revisionesPorEstados: function (identificador) {
       this.revisionEstado = Funciones.convertirRevisionAEstado(identificador)
+    },
+    modificarModal: function () {
+      if (!this.help) {
+        this.help = true
+      } else {
+        this.help = false
+      }
     }
   },
   mounted () {
@@ -332,6 +368,7 @@ export default {
       this.obtenerEstudiante()
       this.obtenerAprobaciones()
       this.obtenerMotivos()
+      this.obtenerFaqs()
     }
   }
 }
