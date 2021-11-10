@@ -13,6 +13,7 @@ export default createStore({
     tipoAprobaciones: [],
     motivos: [],
     faqs: [],
+    faqsProfesor: [],
     jornadaActual: 'Diurna'
   },
   mutations: {
@@ -45,6 +46,9 @@ export default createStore({
     },
     setFaqs (state, valor) {
       state.faqs = valor
+    },
+    setFaqsProfesor (state, valor) {
+      state.faqsProfesor = valor
     },
     setJornadaActual (state, valor) {
       state.jornadaActual = valor

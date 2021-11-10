@@ -8,10 +8,10 @@
           <button class="delete" aria-label="close" @click="modificarModal"></button>
         </header>
         <section class="modal-card-body">
-         <!-- <div class="content" v-for="faq in faqs" :key="faq.id">
+         <div class="content" v-for="faq in faqsProfesor" :key="faq.id">
             <h2 class="title is-5">{{faq.pregunta}}</h2>
             <p>{{faq.respuesta}}</p>
-          </div>-->
+          </div>
         </section>
       </div>
     </div>
@@ -128,7 +128,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'jornadaActual']),
+    ...mapState(['apiUrl', 'jornadaActual', 'faqsProfesor']),
 
     grupoElegido: function () {
       return Object.keys(this.grupoSeleccionado).length > 0
@@ -163,6 +163,14 @@ export default {
         console.log(e)
       }
     },
+    async obtenerAyuda () {
+      try {
+        const response = await axios.get(this.apiUrl + '/faqs/profesor/avances', { headers: Auth.authHeader() })
+        this.$store.commit('setFaqsProfesor', response.data)
+      } catch {
+        console.log('No fue posible obtener las faqs')
+      }
+    },
     revisarAvance: function (bitacora) {
       this.bitacora = bitacora
       this.revisarMinuta = true
@@ -179,6 +187,11 @@ export default {
       } else {
         this.help = false
       }
+    }
+  },
+  created () {
+    if (localStorage.user_tk) {
+      this.obtenerAyuda()
     }
   },
   watch: {

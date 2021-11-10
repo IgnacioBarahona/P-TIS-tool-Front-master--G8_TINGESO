@@ -8,10 +8,10 @@
           <button class="delete" aria-label="close" @click="modificarModal"></button>
         </header>
         <section class="modal-card-body">
-         <!-- <div class="content" v-for="faq in faqs" :key="faq.id">
+         <div class="content" v-for="faq in faqsProfesor" :key="faq.id">
             <h2 class="title is-5">{{faq.pregunta}}</h2>
             <p>{{faq.respuesta}}</p>
-          </div>-->
+          </div>
         </section>
       </div>
     </div>
@@ -324,7 +324,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'secciones']),
+    ...mapState(['apiUrl', 'secciones', 'faqsProfesor']),
 
     mostrarEliminar: function () {
       return this.eliminados.length > 0
@@ -340,6 +340,15 @@ export default {
         this.$store.commit('setSecciones', secciones.data)
       } catch (error) {
         console.log(error)
+      }
+    },
+    async obtenerAyuda () {
+      try {
+        const response = await axios.get(this.apiUrl + '/faqs/profesor/estudiante', { headers: Auth.authHeader() })
+        console.log(response.data)
+        this.$store.commit('setFaqsProfesor', response.data)
+      } catch {
+        console.log('No fue posible obtener las faqs')
       }
     },
     nombreCompleto: function (estudiante) {
@@ -710,6 +719,7 @@ export default {
     if (localStorage.user_tk) {
       this.obtenerSecciones()
       this.obtenerEstudiantes()
+      this.obtenerAyuda()
     }
   }
 }

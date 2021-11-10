@@ -251,8 +251,9 @@ export default {
     },
     async obtenerFaqs () {
       try {
-        const response = await axios.get(this.apiUrl + '/faqs', { headers: Auth.authHeader() })
+        const response = await axios.get(this.apiUrl + '/faqs/estudiante', { headers: Auth.authHeader() })
         this.$store.commit('setFaqs', response.data)
+        console.log(response.data)
       } catch {
         console.log('No fue posible obtener las faqs')
       }

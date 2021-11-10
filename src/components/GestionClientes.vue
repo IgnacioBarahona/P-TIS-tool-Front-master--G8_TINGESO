@@ -8,10 +8,10 @@
           <button class="delete" aria-label="close" @click="modificarModal"></button>
         </header>
         <section class="modal-card-body">
-         <!-- <div class="content" v-for="faq in faqs" :key="faq.id">
+         <div class="content" v-for="faq in faqsProfesor" :key="faq.id">
             <h2 class="title is-5">{{faq.pregunta}}</h2>
             <p>{{faq.respuesta}}</p>
-          </div>-->
+          </div>
         </section>
       </div>
     </div>
@@ -213,7 +213,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'jornadaActual']),
+    ...mapState(['apiUrl', 'jornadaActual', 'faqsProfesor']),
 
     listaFiltrada: function () {
       var lista = []
@@ -275,6 +275,14 @@ export default {
         this.listaStakeholders = response.data
       } catch {
         console.log('No fue posible obtener la lista de Clientes')
+      }
+    },
+    async obtenerAyuda () {
+      try {
+        const response = await axios.get(this.apiUrl + '/faqs/profesor/clientes', { headers: Auth.authHeader() })
+        this.$store.commit('setFaqsProfesor', response.data)
+      } catch {
+        console.log('No fue posible obtener las faqs')
       }
     },
     async agregar () {
@@ -471,6 +479,7 @@ export default {
     if (localStorage.user_tk) {
       this.obtenerGrupos()
       this.obtenerStakeholders()
+      this.obtenerAyuda()
     }
   }
 }
