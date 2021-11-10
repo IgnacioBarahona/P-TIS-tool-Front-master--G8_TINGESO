@@ -1,8 +1,36 @@
 <template >
   <div>
+    <div class="modal" :class="help ? 'is-active': ''" >
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title title is-4">Revisión de minutas</p>
+          <button class="delete" aria-label="close" @click="modificarModal"></button>
+        </header>
+        <section class="modal-card-body">
+         <!-- <div class="content" v-for="faq in faqs" :key="faq.id">
+            <h2 class="title is-5">{{faq.pregunta}}</h2>
+            <p>{{faq.respuesta}}</p>
+          </div>-->
+        </section>
+      </div>
+    </div>
+
     <br>
 
     <div v-if="!mostrarFormulario">
+      <div class="columns">
+        <div class="column is-8"></div>
+        <div class="column is-4">
+          <div class="control">
+            <div class="field is-grouped is-grouped-right">
+              <p class="control">
+                <a class="button is-light-usach" @click="modificarModal" >Ayuda</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <SelectorJornada/>
 
@@ -113,6 +141,7 @@ export default {
   },
   data () {
     return {
+      help: false,
       mostrarFormulario: false,
       mostrarMinutas: false,
       mostrarRegistros: false,
@@ -162,6 +191,13 @@ export default {
     },
     actualizarTipo: function (tipo) {
       return Funciones.actualizarTipo(tipo)
+    },
+    modificarModal: function () {
+      if (!this.help) {
+        this.help = true
+      } else {
+        this.help = false
+      }
     }
   },
   watch: {

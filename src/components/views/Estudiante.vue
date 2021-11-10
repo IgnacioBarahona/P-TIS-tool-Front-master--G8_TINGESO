@@ -13,7 +13,6 @@
             <h2 class="title is-5">{{faq.pregunta}}</h2>
             <p>{{faq.respuesta}}</p>
           </div>
-          <!-- Content ... -->
         </section>
       </div>
     </div>
