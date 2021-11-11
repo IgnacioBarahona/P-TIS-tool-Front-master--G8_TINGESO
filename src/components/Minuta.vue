@@ -86,7 +86,7 @@
       </div>
       <div class="field is-horizontal">
         <div class="field-label">
-          <label class="label">Tema:</label>
+          <abbr title="Propósito general de la reunión"><strong>Tema:</strong></abbr>
         </div>
         <div class="field-body">
           <div class="field">
@@ -143,7 +143,7 @@
 
       <div class="columns">
         <div class="column is-full">
-          <p class="title is-5 has-text-centered">CLASIFICACIÓN</p>
+         <p class="title is-5 has-text-centered"><abbr title="Clasificación según tipo de reunión">CLASIFICACIÓN</abbr></p>
         </div>
       </div>
       <div class="columns">

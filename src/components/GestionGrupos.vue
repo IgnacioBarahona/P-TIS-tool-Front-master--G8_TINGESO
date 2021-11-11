@@ -10,24 +10,7 @@
       <div class="column is-2" v-else>
         <button class="button is-info-usach" @click="agregarGrupo">Agregar Grupo</button>
       </div>
-      <div class="column is-2">
-         <button class="button is-info-usach" @click="modalAyuda.classList.toggle('is-active')">
-           <span class="icon">
-            <i class="fas fa-question-circle"></i>
-           </span>
-          </button>
-      </div>
     </div>
-    <!-- Modal para ayuda -->
-    <div id="modalAyuda" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <!-- Any other Bulma elements you want -->
-        hola
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-
     <div v-if="verFormulario">
       <div class="columns">
         <div class="column is-5">
@@ -45,7 +28,7 @@
             <div class="columns has-text-left">
               <div class="column is-12">
                 <div class="field">
-                  <label class="label">Proyecto:</label>
+                  <abbr id="proyecto" class="effect-underline" title="Nombre del proyecto asociado al grupo"><strong>Proyecto: </strong></abbr>
                   <div class="control">
                     <input class="input" v-model="grupo.proyecto" :class="{ 'is-danger' : entradas.proyecto.error }" type="text" v-on:input="validarProyecto">
                   </div>
@@ -70,7 +53,7 @@
         </div>
         <div class="column is-7 has-text-centered">
           <div class="field">
-            <label id="estudiantes" class="label">Estudiantes a asignar:</label>
+            <abbr  id="estudiantes" title="Estudiantes que se asignarán al grupo correspondiente"><strong>Estudiantes a asignar: </strong></abbr>
           </div>
           <p class="is-danger help" v-if="entradas.estudiantes.error">{{ entradas.estudiantes.mensaje }}</p>
           <br>
