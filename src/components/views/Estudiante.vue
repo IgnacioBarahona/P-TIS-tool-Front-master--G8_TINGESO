@@ -9,9 +9,9 @@
           <button class="delete" aria-label="close" @click="modificarModal"></button>
         </header>
         <section class="modal-card-body">
-          <div class="content" v-for="faq in faqs" :key="faq.id">
-            <h2 class="title is-5">{{faq.pregunta}}</h2>
-            <p>{{faq.respuesta}}</p>
+          <div class="content" v-for="faq in faqs.sort((a, b) => (a.id > b.id ? 1 : -1))" :key="faq.id">
+            <h2 class="title is-5" style="white-space: pre-line">{{faq.pregunta}}</h2>
+            <p><span v-html="transformarPregunta(faq.respuesta).outerHTML" ></span></p>
           </div>
         </section>
       </div>
@@ -307,6 +307,9 @@ export default {
     },
     buscarIdTipoMinuta: function (valor) {
       return Funciones.obtenerIdDeLista(this.tipoMinutas, 'tipo', valor)
+    },
+    transformarPregunta: function (valor) {
+      return Funciones.stringToHTML(valor)
     },
     nuevaEmision: function (identificador, revision) {
       this.verRevision = false
