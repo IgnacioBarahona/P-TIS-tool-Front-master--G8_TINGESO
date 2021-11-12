@@ -22,8 +22,16 @@
             <br>
             <div class="field has-text-left">
               <label class="label">Clave de acceso</label>
-              <div class="control">
-                <input v-model="password" class="input" type="password" v-bind:class="{ 'is-danger' : passError }" v-on:click="noError">
+              <div id="clave" class="control">
+                <input  id="inputClave" v-model="password" class="input" :type="passwordFieldType" v-bind:class="{ 'is-danger' : passError }" v-on:click="noError">
+                <button id="botonMostrarClave" type="password" style="float: right" @click="mostrarClave">
+                  <span v-if="passwordFieldType==='text'" class="icon">
+                    <i class="far fa-eye"></i>
+                  </span>
+                  <span v-if="passwordFieldType==='password'" class="icon">
+                    <i class="far fa-eye-slash"></i>
+                  </span>
+                </button>
                 <span></span>
               </div>
               <p class="help is-danger" v-bind:style="{ display: displayText }">Usuario o contraseña incorrectos</p>
@@ -69,6 +77,7 @@ export default {
     return {
       correo: '',
       password: '',
+      passwordFieldType: 'password',
       passError: false,
       displayText: 'none'
     }
@@ -139,6 +148,9 @@ export default {
         cadena += usuario[llaves[i]] + ';'
       }
       return cadena
+    },
+    mostrarClave: function () {
+      this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
     }
   }
 }
@@ -164,5 +176,21 @@ export default {
   position: absolute;
   height: 585px;
   object-fit: cover;
+}
+#clave{
+  display:flex;
+  flex-direction:row;
+  padding:2px;
+}
+#inputClave{
+  flex-grow:2;
+  border:none;
+}
+#botonMostrarClave{
+  border:none;
+  background:#5C7380;
+  color:white;
+  padding: 5px;
+  border-radius: 4px;
 }
 </style>
