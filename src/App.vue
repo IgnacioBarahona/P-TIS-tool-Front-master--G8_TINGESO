@@ -26,6 +26,7 @@
     }
   }
 }
+/*Bloque de ayuda hover para titulos */
 abbr {
     position: relative;
     text-decoration: underline;
@@ -51,4 +52,33 @@ abbr {
     opacity: .85;
     box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.5)
   }
+.label-ayuda{
+  display: inline-block;
+  font-weight: bold;
+}
+/*Icono de ayuda hover para titulos */
+#icono-ayuda{
+  position: relative
+}
+#icono-ayuda:hover{
+  cursor: help;
+}
+#icono-ayuda:hover:after{
+  position: absolute;
+  z-index:3;
+  bottom: 100%;
+  left: 100%;
+  display: block;
+  padding: 4px;
+  background: #5C7380;
+  color: white;
+  border-radius: 5px;
+  width: 150px;
+  content: attr(ayuda);
+  text-align: center;
+  font-style: normal;
+  font-size: 13px;
+  opacity: .85;
+  box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.5)
+}
 </style>

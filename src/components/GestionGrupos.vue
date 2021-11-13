@@ -28,7 +28,10 @@
             <div class="columns has-text-left">
               <div class="column is-12">
                 <div class="field">
-                  <abbr id="proyecto" class="effect-underline" title="Nombre del proyecto asociado al grupo"><strong>Proyecto: </strong></abbr>
+                  <label class="label-ayuda">Proyecto:</label>
+                  <span id="icono-ayuda" ayuda="Nombre del proyecto asociado al grupo" class="icon is-large">
+                    <i class="far fa-question-circle"></i>
+                  </span>
                   <div class="control">
                     <input class="input" v-model="grupo.proyecto" :class="{ 'is-danger' : entradas.proyecto.error }" type="text" v-on:input="validarProyecto">
                   </div>
@@ -52,8 +55,11 @@
           </form>
         </div>
         <div class="column is-7 has-text-centered">
-          <div class="field">
-            <abbr  id="estudiantes" title="Estudiantes que se asignarán al grupo correspondiente"><strong>Estudiantes a asignar: </strong></abbr>
+          <div id="ayuda" class="field" >
+            <label class="label-ayuda">Estudiantes a asignar:</label>
+              <span id="icono-ayuda" ayuda="Estudiantes que se asignarán al grupo correspondiente" class="icon is-large">
+                <i class="far fa-question-circle"></i>
+              </span>
           </div>
           <p class="is-danger help" v-if="entradas.estudiantes.error">{{ entradas.estudiantes.mensaje }}</p>
           <br>

@@ -86,7 +86,10 @@
       </div>
       <div class="field is-horizontal">
         <div class="field-label">
-          <abbr title="Propósito general de la reunión"><strong>Tema:</strong></abbr>
+          <label class="label-ayuda">Tema:</label>
+          <span id="icono-ayuda" ayuda="Propósito general de la reunión" class="icon is-large">
+            <i class="far fa-question-circle"></i>
+          </span>
         </div>
         <div class="field-body">
           <div class="field">
@@ -142,8 +145,15 @@
       </div>
 
       <div class="columns">
-        <div class="column is-full">
-         <p class="title is-5 has-text-centered"><abbr title="Clasificación según tipo de reunión">CLASIFICACIÓN</abbr></p>
+        <div id="ayuda-div" class="column is-full">
+          <p class="title is-5 has-text-centered">
+            <label class="label-ayuda">
+               CLASIFICACIÓN
+              <span id="icono-ayuda" ayuda="Clasificación según tipo de reunión" class="icon is-large">
+                <i class="far fa-question-circle"></i>
+              </span>
+          </label>
+          </p>
         </div>
       </div>
       <div class="columns">
@@ -271,7 +281,7 @@
           <thead>
             <tr>
               <th scope="col" class="is-narrow has-text-centered">N°</th>
-              <th scope="col" class="has-text-centered"><abbr title="Tipo de actividad">Item</abbr></th>
+              <th scope="col" class="has-text-centered"><abbr title="Tipo de actividad">Item </abbr></th>
               <th scope="col" class="has-text-centered"><abbr title="Descripción de la actividad realizada">Descripción</abbr></th>
               <th scope="col" class="has-text-centered"><abbr title="Fecha comprometida para la actividad">Fecha</abbr></th>
               <th scope="col" class="has-text-centered"><abbr title="Responsable de realizarla">Responsable</abbr></th>
@@ -1013,3 +1023,5 @@ export default {
   }
 }
 </script>
+<style scoped>
+</style>
