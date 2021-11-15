@@ -15,26 +15,33 @@
 
             <div class="field">
               <label class="label has-text-left">Correo electrónico</label>
-              <div class="control">
+              <div class="control has-icons-left">
                 <input v-model="correo" class="input" type="text" v-bind:class="{ 'is-danger' : passError }" placeholder="nombre.apellido@usach.cl" v-on:click="noError">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-id-card" aria-hidden="true"></i>
+                </span>
               </div>
             </div>
             <br>
             <div class="field has-text-left">
               <label class="label">Clave de acceso</label>
-              <div id="clave" class="control">
+            </div>
+            <div class="field has-addons">
+              <div id="clave" class="control has-icons-left is-expanded">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-key" aria-hidden="true"></i>
+                </span>
                 <input  id="inputClave" v-model="password" class="input" :type="passwordFieldType" v-bind:class="{ 'is-danger' : passError }" v-on:click="noError">
-                <button id="botonMostrarClave" type="password" style="float: right" @click="mostrarClave">
-                  <span v-if="passwordFieldType==='text'" class="icon">
-                    <i class="far fa-eye"></i>
-                  </span>
-                  <span v-if="passwordFieldType==='password'" class="icon">
-                    <i class="far fa-eye-slash"></i>
-                  </span>
-                </button>
-                <span></span>
               </div>
-              <p class="help is-danger" v-bind:style="{ display: displayText }">Usuario o contraseña incorrectos</p>
+              <button id="botonMostrarClave" type="password" style="float: right" @click="mostrarClave">
+                <span v-if="passwordFieldType==='text'" class="icon">
+                  <i class="far fa-eye"></i>
+                </span>
+                <span v-if="passwordFieldType==='password'" class="icon">
+                  <i class="far fa-eye-slash"></i>
+                </span>
+              </button>
+                <p class="help is-danger" v-bind:style="{ display: displayText }">Usuario o contraseña incorrectos</p>
             </div>
             <br>
           </div>
@@ -177,20 +184,10 @@ export default {
   height: 585px;
   object-fit: cover;
 }
-#clave{
-  display:flex;
-  flex-direction:row;
-  padding:2px;
-}
-#inputClave{
-  flex-grow:2;
-  border:none;
-}
+
 #botonMostrarClave{
   border:none;
   background:#5C7380;
   color:white;
-  padding: 5px;
-  border-radius: 4px;
 }
 </style>
