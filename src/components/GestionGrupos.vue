@@ -7,10 +7,18 @@
           <p class="modal-card-title title is-4">Gestión de grupos</p>
           <button class="delete" aria-label="close" @click="modificarModal"></button>
         </header>
-        <section class="modal-card-body">
-          <div class="content" v-for="faq in faqsProfesor" :key="faq.id">
-            <h2 class="title is-5">{{faq.pregunta}}</h2>
-            <p>{{faq.respuesta}}</p>
+        <section class="modal-card-body has-text-left">
+          <div class="content" v-for="faq in faqsProfesor.sort((a, b) => (a.id > b.id ? 1 : -1))" :key="faq.id">
+            <div class="columns">
+              <div class="column is-10"><h2 class="title is-5" style="white-space: pre-line">{{faq.pregunta}}</h2></div>
+              <div class="column is-2" v-if="!faqs_open.includes(faq.id)" @click="modificarArray(faq.id)">
+                <button class="delete fas fa-angle-right"></button>
+              </div>
+              <div class="column is-2" v-else @click="removerDeArray(faqs_open, faq.id)">
+                <button class="delete fas fa-angle-down" ></button>
+              </div>
+            </div>
+            <p v-if="faqs_open.includes(faq.id)"><span v-html="transformarPregunta(faq.respuesta).outerHTML" ></span></p>
           </div>
         </section>
       </div>
@@ -179,7 +187,8 @@ export default {
         mensaje: '¿Confirma la eliminación del grupo?'
       },
       actualizarGrupo: false,
-      idGrupo: 0
+      idGrupo: 0,
+      faqs_open: []
     }
   },
   computed: {
@@ -424,6 +433,15 @@ export default {
       } else {
         this.help = false
       }
+    },
+    removerDeArray: function (arr, valor) {
+      return Funciones.removeFromArray(arr, valor)
+    },
+    modificarArray: function (element) {
+      this.faqs_open.push(element)
+    },
+    transformarPregunta: function (valor) {
+      return Funciones.stringToHTML(valor)
     }
   },
   watch: {

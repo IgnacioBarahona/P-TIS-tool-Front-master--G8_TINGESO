@@ -10,8 +10,16 @@
         </header>
         <section class="modal-card-body">
           <div class="content" v-for="faq in faqs.sort((a, b) => (a.id > b.id ? 1 : -1))" :key="faq.id">
-            <h2 class="title is-5" style="white-space: pre-line">{{faq.pregunta}}</h2>
-            <p><span v-html="transformarPregunta(faq.respuesta).outerHTML" ></span></p>
+            <div class="columns">
+              <div class="column is-10"><h2 class="title is-5" style="white-space: pre-line">{{faq.pregunta}}</h2></div>
+              <div class="column is-2" v-if="!faqs_open.includes(faq.id)" @click="modificarArray(faq.id)">
+                <button class="delete fas fa-angle-right"></button>
+              </div>
+              <div class="column is-2" v-else @click="removerDeArray(faqs_open, faq.id)">
+                <button class="delete fas fa-angle-down" ></button>
+              </div>
+            </div>
+            <p v-if="faqs_open.includes(faq.id)"><span v-html="transformarPregunta(faq.respuesta).outerHTML" ></span></p>
           </div>
         </section>
       </div>
@@ -165,7 +173,8 @@ export default {
       valorActual: 0,
       tableroEst: 0,
       bitacoraAvance: {},
-      revisionEstado: ''
+      revisionEstado: '',
+      faqs_open: []
     }
   },
   computed: {
@@ -311,6 +320,10 @@ export default {
     transformarPregunta: function (valor) {
       return Funciones.stringToHTML(valor)
     },
+    removerDeArray: function (arr, valor) {
+      console.log(valor)
+      return Funciones.removeFromArray(arr, valor)
+    },
     nuevaEmision: function (identificador, revision) {
       this.verRevision = false
       this.verComentarios = false
@@ -363,6 +376,11 @@ export default {
       } else {
         this.help = false
       }
+      this.faqs_open = []
+    },
+    modificarArray: function (element) {
+      console.log(element)
+      this.faqs_open.push(element)
     }
   },
   mounted () {
