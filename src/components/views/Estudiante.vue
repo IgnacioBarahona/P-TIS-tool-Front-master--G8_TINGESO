@@ -14,7 +14,7 @@
         </div>
         <section class="modal-card-body">
           <div class="content" v-for="faq in faqs.sort((a, b) => (a.id > b.id ? 1 : -1))" :key="faq.id">
-            <div class="columns is-info-usach faq_question">
+            <div class="columns is-info-usach">
               <div class="column is-11"><h2 class="title is-5">{{faq.pregunta}}</h2></div>
               <div class="column is-1" v-if="!faqs_open.includes(faq.id)" @click="modificarArray(faq.id)">
                 <button class="delete fas fa-angle-down"></button>

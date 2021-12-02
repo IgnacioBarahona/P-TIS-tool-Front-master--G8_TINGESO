@@ -13,7 +13,7 @@
         </div>
         <section class="modal-card-body has-text-left">
           <div class="content" v-for="faq in faqsProfesor.sort((a, b) => (a.id > b.id ? 1 : -1))" :key="faq.id">
-            <div class="columns faq_question">
+            <div class="columns">
               <div class="column is-11"><h2 class="title is-5" style="white-space: pre-line">{{faq.pregunta}}</h2></div>
               <div class="column is-1" v-if="!faqs_open.includes(faq.id)" @click="modificarArray(faq.id)">
                 <button class="delete fas fa-angle-down"></button>
