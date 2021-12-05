@@ -360,7 +360,6 @@ export default {
     async obtenerAyuda () {
       try {
         const response = await axios.get(this.apiUrl + '/faqs/profesor/estudiante', { headers: Auth.authHeader() })
-        console.log(response.data)
         this.$store.commit('setFaqsProfesor', response.data)
       } catch {
         console.log('No fue posible obtener las faqs')

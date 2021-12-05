@@ -268,7 +268,6 @@ export default {
       try {
         const response = await axios.get(this.apiUrl + '/faqs/rol', { headers: Auth.authHeader() })
         this.$store.commit('setFaqs', response.data)
-        console.log(response.data)
       } catch {
         console.log('No fue posible obtener las faqs')
       }
@@ -327,7 +326,6 @@ export default {
       return Funciones.stringToHTML(valor)
     },
     removerDeArray: function (arr, valor) {
-      console.log(valor)
       return Funciones.removeFromArray(arr, valor)
     },
     nuevaEmision: function (identificador, revision) {
@@ -385,7 +383,6 @@ export default {
       this.faqs_open = []
     },
     modificarArray: function (element) {
-      console.log(element)
       this.faqs_open.push(element)
     }
   },

@@ -101,13 +101,13 @@ export default {
     },
     redirigirUsuario () {
       if (this.usuario.rol.rango === 1) {
-        this.$router.push('coordinador')
+        this.$router.push('/coordinador')
       } else if (this.usuario.rol.rango === 2) {
-        this.$router.push('profesor')
+        this.$router.push('/profesor')
       } else if (this.usuario.rol.rango === 3) {
-        this.$router.push('estudiante')
+        this.$router.push('/estudiante')
       } else if (this.usuario.rol.rango === 4) {
-        this.$router.push('cliente')
+        this.$router.push('/cliente')
       } else {
         this.$router.push('/')
       }
@@ -142,14 +142,18 @@ export default {
     }
   },
   mounted () {
-    if (this.usuario.rol.rango === '1') {
-      this.$router.push('coordinador')
-    } else if (this.usuario.rol.rango === '2') {
-      this.$router.push('profesor')
-    } else if (this.usuario.rol.rango === '3') {
-      this.$router.push('estudiante')
-    } else if (this.usuario.rol.rango === '4') {
-      this.$router.push('cliente')
+    if (localStorage.user_tk) {
+      if (parseInt(this.usuario.rol.rango) === 1) {
+        this.$router.push('coordinador')
+      } else if (parseInt(this.usuario.rol.rango) === 2) {
+        this.$router.push('profesor')
+      } else if (parseInt(this.usuario.rol.rango) === 3) {
+        this.$router.push('estudiante')
+      } else if (parseInt(this.usuario.rol.rango) === 4) {
+        this.$router.push('cliente')
+      } else {
+        this.$router.push('/')
+      }
     } else {
       this.$router.push('/')
     }
