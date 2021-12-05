@@ -1,6 +1,36 @@
 <template>
   <div class="has-text-left">
 
+    <div class="modal animate__animated animate__fadeIn" :class="help ? 'is-active': ''" >
+      <div class="modal-background" @click="modificarModal"></div>
+      <div class="modal-card">
+        <div class="modal-card-head">
+          <p class="modal-card-title title is-4">Preguntas Frecuentes del uso de la herramienta</p>
+          <button class="modal-close" aria-label="close" @click="modificarModal"></button>
+        </div>
+        <div class="columns modal-decoration">
+          <div class="header-nav-blue column is-5"></div>
+          <div class="header-nav-orange column is-7"></div>
+        </div>
+        <section class="modal-card-body">
+          <div class="content" v-for="faq in faqs.sort((a, b) => (a.id > b.id ? 1 : -1))" :key="faq.id">
+            <div class="columns is-info-usach">
+              <div class="column is-11"><h2 class="title is-5">{{faq.pregunta}}</h2></div>
+              <div class="column is-1" v-if="!faqs_open.includes(faq.id)" @click="modificarArray(faq.id)">
+                <button class="delete fas fa-angle-down"></button>
+              </div>
+              <div class="column is-1" v-else @click="removerDeArray(faqs_open, faq.id)">
+                <button class="delete fas fa-angle-up" ></button>
+              </div>
+            </div>
+            <transition name="fade" tag="ul" >
+              <p v-if="faqs_open.includes(faq.id)"><span v-html="transformarPregunta(faq.respuesta).outerHTML" ></span></p>
+            </transition>
+          </div>
+        </section>
+      </div>
+    </div>
+
     <div v-if="crearMinuta">
 
       <Minuta :tipo-minuta="tipo" :id-bitacora="idBitacora" :id-motivo="idMotivo" :re-emitir="esNuevaEmision" :letra-revision="nuevaRevision" :estado="revisionEstado" v-if="verFormulario" @cerrar="cerrarFormulario"/>
@@ -12,7 +42,10 @@
       <div v-else>
 
         <div class="columns">
-          <div class="column is-10"></div>
+          <div class="column is-9"></div>
+          <div class="column is-1">
+            <button class="button is-light-usach" @click="modificarModal" >Ayuda</button>
+          </div>
           <div class="column is-2">
             <button class="button is-info-usach" @click="nuevaMinuta">Nueva Minuta</button>
           </div>
@@ -131,6 +164,7 @@ export default {
       idRespuestas: 0,
       idEmision: 0,
       idVerMinuta: 0,
+      help: false,
       crearMinuta: true,
       verRevision: false,
       verComentarios: false,
@@ -145,11 +179,12 @@ export default {
       valorActual: 0,
       tableroEst: 0,
       bitacoraAvance: {},
-      revisionEstado: ''
+      revisionEstado: '',
+      faqs_open: []
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'tipoMinutas', 'usuario', 'estudiante', 'grupo', 'motivos']),
+    ...mapState(['apiUrl', 'tipoMinutas', 'usuario', 'estudiante', 'grupo', 'motivos', 'faqs']),
 
     minutasFiltradas: function () {
       var lista = []
@@ -229,6 +264,15 @@ export default {
         console.log('No fue posible obtener los motivos de emisión')
       }
     },
+    async obtenerFaqs () {
+      try {
+        const response = await axios.get(this.apiUrl + '/faqs/rol', { headers: Auth.authHeader() })
+        this.$store.commit('setFaqs', response.data)
+        console.log(response.data)
+      } catch {
+        console.log('No fue posible obtener las faqs')
+      }
+    },
     cambiarTab: function () {
       this.verEmision = false
     },
@@ -279,6 +323,13 @@ export default {
     buscarIdTipoMinuta: function (valor) {
       return Funciones.obtenerIdDeLista(this.tipoMinutas, 'tipo', valor)
     },
+    transformarPregunta: function (valor) {
+      return Funciones.stringToHTML(valor)
+    },
+    removerDeArray: function (arr, valor) {
+      console.log(valor)
+      return Funciones.removeFromArray(arr, valor)
+    },
     nuevaEmision: function (identificador, revision) {
       this.verRevision = false
       this.verComentarios = false
@@ -324,6 +375,18 @@ export default {
     },
     revisionesPorEstados: function (identificador) {
       this.revisionEstado = Funciones.convertirRevisionAEstado(identificador)
+    },
+    modificarModal: function () {
+      if (!this.help) {
+        this.help = true
+      } else {
+        this.help = false
+      }
+      this.faqs_open = []
+    },
+    modificarArray: function (element) {
+      console.log(element)
+      this.faqs_open.push(element)
     }
   },
   mounted () {
@@ -332,6 +395,7 @@ export default {
       this.obtenerEstudiante()
       this.obtenerAprobaciones()
       this.obtenerMotivos()
+      this.obtenerFaqs()
     }
   }
 }
@@ -341,4 +405,5 @@ export default {
 .new-section {
   padding: 1rem 1.5rem;
 }
+
 </style>

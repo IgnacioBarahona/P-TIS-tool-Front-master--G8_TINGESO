@@ -17,6 +17,7 @@
   }
 }
 
+
 .delete, .modal-close, .button, .file, .breadcrumb, .pagination-previous,
 .pagination-next,
 .pagination-link,
@@ -74,7 +75,7 @@
 }
 
 .delete::before, .modal-close::before, .delete::after, .modal-close::after {
-  background-color: white;
+  background-color: #fffffffb;
   content: "";
   display: block;
   left: 50%;
@@ -101,6 +102,7 @@
 .delete:active, .modal-close:active {
   background-color: rgba(10, 10, 10, 0.4);
 }
+
 
 .is-small.delete, .is-small.modal-close {
   height: 16px;
@@ -5783,6 +5785,7 @@ button.dropdown-item.is-active {
   overflow: hidden;
   position: fixed;
   z-index: 40;
+  border-color: #002f6c;
 }
 
 .modal.is-active {
@@ -5835,18 +5838,27 @@ button.dropdown-item.is-active {
   display: flex;
   flex-shrink: 0;
   justify-content: flex-start;
-  padding: 20px;
+  padding: 12px;
   position: relative;
 }
 
 .modal-card-head {
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 2px solid #002f6c;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
 
+.modal-card-head > * {
+  padding-top: 12px;
+  padding-left: 10px ;
+}
+
+.modal-card-head > p {
+  padding-top: 20px; 
+}
+
 .modal-card-title {
-  color: #363636;
+  color: #00947e;
   flex-grow: 1;
   flex-shrink: 0;
   font-size: 1.5rem;
@@ -5863,14 +5875,29 @@ button.dropdown-item.is-active {
   margin-right: 0.5em;
 }
 
-.modal-card-body {
-  -webkit-overflow-scrolling: touch;
+section.modal-card-body {
   background-color: white;
   flex-grow: 1;
   flex-shrink: 1;
   overflow: auto;
-  padding: 20px;
+  padding: 12px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+
 }
+
+.modal-card-body > div.content {
+  padding-top: 17px;
+  padding-bottom: 17px;
+  margin-bottom: 0px;
+ 
+}
+
+.modal-decoration{
+  height: 5px;
+  margin: 0;
+}
+
 
 .navbar {
   background-color: white;
@@ -12216,4 +12243,43 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   background-color: #fafafa;
   padding: 3rem 1.5rem 6rem;
 }
+
+ .fade-enter-active,.fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-leave-to,.fade-enter-from /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all .4s ease;
+}
+
+.slide-fade-enter-from {
+  transform: translateY(-50px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateY(30px) scale(0.9);
+  opacity: 0;
+}
+
+.faq_question{
+  border-bottom: 1px solid #001656
+}
+
+
+.header-nav-blue  {
+  background: rgba(14, 53, 108, 1);
+}
+
+
+.header-nav-orange {
+  background: rgba(229, 111, 31, 1);
+}
+
+ 
+
 /*# sourceMappingURL=bulma.css.map */

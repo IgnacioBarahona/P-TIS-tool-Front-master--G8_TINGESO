@@ -1,7 +1,50 @@
 <template>
   <div>
+    <div class="modal animate__animated animate__fadeIn" :class="help ? 'is-active': ''" >
+      <div class="modal-background" @click="modificarModal"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title title is-4">Revisión avances</p>
+          <button class="modal-close" aria-label="close" @click="modificarModal"></button>
+        </header>
+        <div class="columns modal-decoration">
+          <div class="header-nav-blue column is-5"></div>
+          <div class="header-nav-orange column is-7"></div>
+        </div>
+        <section class="modal-card-body has-text-left">
+          <div class="content" v-for="faq in faqsProfesor.sort((a, b) => (a.id > b.id ? 1 : -1))" :key="faq.id">
+            <div class="columns">
+              <div class="column is-11"><h2 class="title is-5" style="white-space: pre-line">{{faq.pregunta}}</h2></div>
+              <div class="column is-1" v-if="!faqs_open.includes(faq.id)" @click="modificarArray(faq.id)">
+                <button class="delete fas fa-angle-down"></button>
+              </div>
+              <div class="column is-2" v-else @click="removerDeArray(faqs_open, faq.id)">
+                <button class="delete fas fa-angle-up" ></button>
+              </div>
+            </div>
+            <transition name="fade" tag="ul" >
+            <p v-if="faqs_open.includes(faq.id)"><span v-html="transformarPregunta(faq.respuesta).outerHTML" ></span></p>
+            </transition>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <br>
 
     <div v-if="!revisarMinuta">
+      <div class="columns">
+        <div class="column is-8"></div>
+        <div class="column is-4" >
+          <div class="control">
+            <div class="field is-grouped is-grouped-right">
+              <p class="control">
+                <a v-if="!grupoElegido" class="button is-light-usach" @click="modificarModal">Ayuda</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <br>
       <SelectorJornada/>
@@ -91,14 +134,16 @@ export default {
   },
   data () {
     return {
+      help: false,
       grupoSeleccionado: {},
       listaAvances: [],
       revisarMinuta: false,
-      bitacora: {}
+      bitacora: {},
+      faqs_open: []
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'jornadaActual']),
+    ...mapState(['apiUrl', 'jornadaActual', 'faqsProfesor']),
 
     grupoElegido: function () {
       return Object.keys(this.grupoSeleccionado).length > 0
@@ -133,6 +178,14 @@ export default {
         console.log(e)
       }
     },
+    async obtenerAyuda () {
+      try {
+        const response = await axios.get(this.apiUrl + '/faqs/profesor/avances', { headers: Auth.authHeader() })
+        this.$store.commit('setFaqsProfesor', response.data)
+      } catch {
+        console.log('No fue posible obtener las faqs')
+      }
+    },
     revisarAvance: function (bitacora) {
       this.bitacora = bitacora
       this.revisarMinuta = true
@@ -142,6 +195,27 @@ export default {
       this.grupoSeleccionado = {}
       this.listaAvances = []
       this.bitacora = {}
+    },
+    modificarModal: function () {
+      if (!this.help) {
+        this.help = true
+      } else {
+        this.help = false
+      }
+    },
+    removerDeArray: function (arr, valor) {
+      return Funciones.removeFromArray(arr, valor)
+    },
+    modificarArray: function (element) {
+      this.faqs_open.push(element)
+    },
+    transformarPregunta: function (valor) {
+      return Funciones.stringToHTML(valor)
+    }
+  },
+  created () {
+    if (localStorage.user_tk) {
+      this.obtenerAyuda()
     }
   },
   watch: {
