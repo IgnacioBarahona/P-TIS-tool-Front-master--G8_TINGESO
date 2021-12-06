@@ -98,7 +98,10 @@
             </div>
             <div class="column is-8">
               <div class="field">
-                <label class="label">Grupo a asignar:</label>
+                <label class="label-ayuda">Grupo a asignar:</label>
+                <span id="icono-ayuda" ayuda="Grupo que trabajará con el cliente" class="icon is-large">
+                  <i class="far fa-question-circle"></i>
+                </span>
                 <div class="control">
                   <div class="select is-fullwidth">
                     <select v-model="stakeholder.grupo_id" @change="validarGrupo" :class="{ 'is-danger' : entradas.grupo.error}" :disabled="actualizarStakeholder">

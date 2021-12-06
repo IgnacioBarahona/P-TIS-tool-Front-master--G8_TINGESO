@@ -86,7 +86,10 @@
       </div>
       <div class="field is-horizontal">
         <div class="field-label">
-          <label class="label">Tema:</label>
+          <label class="label-ayuda">Tema:</label>
+          <span id="icono-ayuda" ayuda="Propósito general de la reunión" class="icon is-large">
+            <i class="far fa-question-circle"></i>
+          </span>
         </div>
         <div class="field-body">
           <div class="field">
@@ -142,8 +145,15 @@
       </div>
 
       <div class="columns">
-        <div class="column is-full">
-          <p class="title is-5 has-text-centered">CLASIFICACIÓN</p>
+        <div id="ayuda-div" class="column is-full">
+          <p class="title is-5 has-text-centered">
+            <label class="label-ayuda">
+               CLASIFICACIÓN
+              <span id="icono-ayuda" ayuda="Clasificación según lo tratado en la reunión" class="icon is-large">
+                <i class="far fa-question-circle"></i>
+              </span>
+          </label>
+          </p>
         </div>
       </div>
       <div class="columns">
@@ -270,11 +280,33 @@
         <table class="table is-hoverable is-fullwidth" summary="Items de la minuta">
           <thead>
             <tr>
-              <th scope="col" class="is-narrow has-text-centered">N°</th>
-              <th scope="col" class="has-text-centered"><abbr title="Tipo de actividad">Item</abbr></th>
-              <th scope="col" class="has-text-centered"><abbr title="Descripción de la actividad realizada">Descripción</abbr></th>
-              <th scope="col" class="has-text-centered"><abbr title="Fecha comprometida para la actividad">Fecha</abbr></th>
-              <th scope="col" class="has-text-centered"><abbr title="Responsable de realizarla">Responsable</abbr></th>
+              <th scope="col" class="is-narrow has-text-centered">
+                N°
+              </th>
+              <th scope="col" class="has-text-centered">
+                Item
+                <span id="icono-ayuda" ayuda="Tipo de Actividad" class="icon is-large">
+                  <i class="far fa-question-circle"></i>
+                </span>
+              </th>
+              <th scope="col" class="has-text-centered">
+                Descripción
+                <span id="icono-ayuda" ayuda="Descripción de la actividad realizada" class="icon is-large">
+                  <i class="far fa-question-circle"></i>
+                </span>
+              </th>
+              <th scope="col" class="has-text-centered">
+                Fecha
+                <span id="icono-ayuda" ayuda="Fecha comprometida para la actividad" class="icon is-large">
+                  <i class="far fa-question-circle"></i>
+                </span>
+              </th>
+              <th scope="col" class="has-text-centered">
+                Responsable
+                <span id="icono-ayuda" ayuda="Responsable a realizarla" class="icon is-large">
+                  <i class="far fa-question-circle"></i>
+                </span>
+              </th>
               <th scope="col" class="has-text-centered"><a class="button is-rounded is-info-usach is-small" @click="agregarItem"><strong>+</strong></a></th>
             </tr>
           </thead>
@@ -1013,3 +1045,5 @@ export default {
   }
 }
 </script>
+<style scoped>
+</style>

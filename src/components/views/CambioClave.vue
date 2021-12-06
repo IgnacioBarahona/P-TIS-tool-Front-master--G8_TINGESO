@@ -8,40 +8,64 @@
         <div class="field has-text-left">
           <label class="label">Contraseña actual:</label>
         </div>
-        <div class="field">
-          <div class="control has-icons-left">
-            <input class="input" v-model="actual" :class="{ 'is-danger' : entradas.actual.error }" @input="limpiarActual" type="password" placeholder="Contraseña actual">
+        <div class="field has-addons">
+          <div id="clave" class="control has-icons-left is-expanded">
+            <input class="input" v-model="actual" :class="{ 'is-danger' : entradas.actual.error }" :type="passwordFieldTypeActual" @input="limpiarActual" placeholder="Contraseña actual">
             <span class="icon is-small is-left">
               <i class="fas fa-id-card" aria-hidden="true"></i>
             </span>
             <p class="help is-danger" v-if="entradas.actual.error">{{ entradas.actual.mensaje }}</p>
           </div>
+          <button id="botonMostrarClave" type="password" style="float: right" @click="mostrarClaveActual">
+            <span v-if="passwordFieldTypeActual==='text'" class="icon">
+              <i class="far fa-eye"></i>
+            </span>
+            <span v-if="passwordFieldTypeActual==='password'" class="icon">
+              <i class="far fa-eye-slash"></i>
+            </span>
+          </button>
         </div>
 
         <div class="field has-text-left">
           <label class="label">Nueva contraseña:</label>
         </div>
-        <div class="field">
-          <div class="control has-icons-left">
-            <input class="input" v-model="nueva" :class="{ 'is-danger' : entradas.nueva.error }" @input="limpiarNueva" type="password" placeholder="Nueva contraseña">
+        <div class="field has-addons">
+          <div id="clave" class="control has-icons-left is-expanded">
             <span class="icon is-small is-left">
               <i class="fas fa-key" aria-hidden="true"></i>
             </span>
+            <input class="input" v-model="nueva" :class="{ 'is-danger' : entradas.nueva.error }" :type="passwordFieldTypeNueva" @input="limpiarNueva"  placeholder="Nueva contraseña">
             <p class="help is-danger" v-if="entradas.nueva.error">{{ entradas.nueva.mensaje }}</p>
           </div>
+          <button id="botonMostrarClave" type="password" style="float: right" @click="mostrarClaveNueva">
+            <span v-if="passwordFieldTypeNueva==='text'" class="icon">
+              <i class="far fa-eye"></i>
+            </span>
+            <span v-if="passwordFieldTypeNueva==='password'" class="icon">
+              <i class="far fa-eye-slash"></i>
+            </span>
+          </button>
         </div>
 
         <div class="field has-text-left">
           <label class="label">Repita nueva contraseña:</label>
         </div>
-        <div class="field">
-          <div class="control has-icons-left">
-            <input class="input" v-model="repetirNueva" :class="{ 'is-danger' : entradas.repetir.error }" @input="limpiarRepetir" type="password" placeholder="Repita nueva contraseña">
+        <div class="field has-addons">
+          <div id="clave" class="control has-icons-left is-expanded">
+            <input class="input" v-model="repetirNueva" :class="{ 'is-danger' : entradas.repetir.error }" :type="passwordFieldTypeRepetir" @input="limpiarRepetir"  placeholder="Repita nueva contraseña">
             <span class="icon is-small is-left">
               <i class="fas fa-lock" aria-hidden="true"></i>
             </span>
             <p class="help is-danger" v-if="entradas.repetir.error">{{ entradas.repetir.mensaje }}</p>
           </div>
+          <button id="botonMostrarClave" type="password" style="float: right" @click="mostrarClaveRepetir">
+            <span v-if="passwordFieldTypeRepetir==='text'" class="icon">
+              <i class="far fa-eye"></i>
+            </span>
+            <span v-if="passwordFieldTypeRepetir==='password'" class="icon">
+              <i class="far fa-eye-slash"></i>
+            </span>
+          </button>
         </div>
 
         <div class="field mt-6 is-grouped is-grouped-centered">
@@ -73,6 +97,9 @@ export default {
       actual: '',
       nueva: '',
       repetirNueva: '',
+      passwordFieldTypeActual: 'password',
+      passwordFieldTypeNueva: 'password',
+      passwordFieldTypeRepetir: 'password',
       entradas: {
         actual: {
           error: false,
@@ -235,7 +262,23 @@ export default {
       this.limpiarActual()
       this.limpiarNueva()
       this.limpiarRepetir()
+    },
+    mostrarClaveActual: function () {
+      this.passwordFieldTypeActual = this.passwordFieldTypeActual === 'password' ? 'text' : 'password'
+    },
+    mostrarClaveNueva: function () {
+      this.passwordFieldTypeNueva = this.passwordFieldTypeNueva === 'password' ? 'text' : 'password'
+    },
+    mostrarClaveRepetir: function () {
+      this.passwordFieldTypeRepetir = this.passwordFieldTypeRepetir === 'password' ? 'text' : 'password'
     }
   }
 }
 </script>
+<style scoped>
+#botonMostrarClave{
+  background:#5C7380;
+  color:white;
+  border: none;
+}
+</style>
