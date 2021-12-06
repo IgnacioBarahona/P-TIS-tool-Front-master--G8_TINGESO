@@ -37,20 +37,20 @@ abbr {
   abbr:hover::after {
     position: absolute;
     z-index:3;
-    bottom: 100%;
+    bottom: 42px;
     left: 100%;
     display: block;
-    padding: 4px;
+    padding: 8px;
     background: #5C7380;
     color: white;
-    border-radius: 5px;
+    border-radius: 3px;
     width: 150px;
     content: attr(title);
     text-align: center;
     font-style: normal;
     font-size: 13px;
     opacity: .85;
-    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.5)
+    box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.25)
   }
 .label-ayuda{
   display: inline-block;
@@ -66,19 +66,19 @@ abbr {
 #icono-ayuda:hover:after{
   position: absolute;
   z-index:3;
-  bottom: 100%;
-  left: 100%;
-  display: block;
-  padding: 4px;
+  bottom: 42px;
+  left: -100%;
+  display: inline-block;
+  padding: 8px;
   background: #5C7380;
   color: white;
-  border-radius: 5px;
+  border-radius: 3px;
   width: 150px;
   content: attr(ayuda);
   text-align: center;
   font-style: normal;
   font-size: 13px;
   opacity: .85;
-  box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.5)
+  box-shadow: 0px 2px 5px 0 rgba(0, 0, 0, 0.25)
 }
 </style>
