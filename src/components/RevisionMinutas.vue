@@ -74,10 +74,10 @@
                   <tbody>
                     <tr v-for="(bitacora, index) in listaMinutas" :key="bitacora.id">
                       <th scope="row" class="has-text-centered">{{ index + 1 }}</th>
-                      <td><a @click="traerMinuta(bitacora.id)">{{ bitacora.minuta.codigo }}_{{ bitacora.revision}}</a></td>
+                      <td><a @click="traerMinuta(bitacora.id_rev[0][0], bitacora.id_rev)">{{ bitacora.minuta.codigo }}</a></td>
                       <td class="has-text-centered">{{ actualizarTipo(bitacora.minuta.tipo) }}</td>
                       <td class="has-text-centered">{{ convertirRevision(bitacora.identificador) }}</td>
-                      <td class="has-text-centered">{{ bitacora.minuta.creada_por }}</td>
+                      <td class="has-text-centered">{{ bitacora.minuta.creada_por[0] }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -94,11 +94,39 @@
     </div>
 
     <div v-else>
-
-      <Informacion :proyecto="grupoSeleccionado" :minuta="bitacora"/>
-      <Objetivos :lista="bitacora.minuta.objetivos"/>
-      <Conclusiones :lista="bitacora.minuta.conclusiones"/>
-      <Items :lista="bitacora.minuta.items" :asistentes="bitacora.minuta.asistencia" :comentar="false" :responder="false" :lista-com="[]" :ver-respuestas="false"/>
+      <div class=" columns">
+        <div class="column is-4 is-offset-8">
+          <div class="box">
+            <div v-if="mostrarVersiones">
+              <div class="columns">
+                <div class="column">
+                  <label id="estudiantes" class="label">Lista de versiones</label>
+                </div>
+                <div class="column">
+                    <div class="select">
+                      <select class="is-hovered" v-model="versionSeleccionada">
+                        <option v-for="version in versiones" :key="version" :value="version"> Version {{ version[1] }}</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="column">
+                  <button class="button is-info-usach" @click="cambiarMinuta">Ver</button>
+                </div>
+              </div>
+              <div v-if="cambiarMinutaEstado === 0">
+                <strong>Usted está en la versión {{ versiones[0][1] }}</strong>
+              </div>
+              <div v-else>
+                <strong>Usted está en la versión {{ verVersion }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Informacion :grupo="grupoSeleccionado" :bitacora="bitacora" :key="cambiarMinutaEstado"/>
+      <Objetivos :listaObjetivos="bitacora.minuta.objetivos" :key="cambiarMinutaEstado"/>
+      <Conclusiones :listaConclusiones="bitacora.minuta.conclusiones" :key="cambiarMinutaEstado"/>
+      <Items :listaItems="bitacora.minuta.items" :asistencia="bitacora.minuta.asistencia" :comentarios="false" :respuestas="false" :comentariosMinuta="[]" :verRespuestas="false" :key="cambiarMinutaEstado"/>
 
       <br>
       <div class="columns">
@@ -136,10 +164,10 @@ import { mapState } from 'vuex'
 
 import SelectorJornada from '@/components/SelectorJornada.vue'
 import SelectorGrupo from '@/components/SelectorGrupo.vue'
-import Informacion from '@/components/minutas/Informacion.vue'
-import Objetivos from '@/components/minutas/Objetivos.vue'
-import Conclusiones from '@/components/minutas/Conclusiones.vue'
-import Items from '@/components/minutas/Items.vue'
+import Informacion from '@/components/minutas/RevisionProfesor/Informacion.vue'
+import Objetivos from '@/components/minutas/RevisionProfesor/Objetivos.vue'
+import Conclusiones from '@/components/minutas/RevisionProfesor/Conclusiones.vue'
+import Items from '@/components/minutas/RevisionProfesor/Items.vue'
 import Registros from '@/components/RegistroMinuta.vue'
 
 export default {
@@ -159,9 +187,14 @@ export default {
       mostrarFormulario: false,
       mostrarMinutas: false,
       mostrarRegistros: false,
+      mostrarVersiones: false,
+      verVersion: '',
       grupoSeleccionado: {},
       listaMinutas: [],
       bitacora: {},
+      versiones: [],
+      versionSeleccionada: [],
+      cambiarMinutaEstado: 0,
       faqs_open: []
     }
   },
@@ -173,6 +206,11 @@ export default {
       this.grupoSeleccionado = grupo
       this.obtenerMinutas(grupo.id)
       this.mostrarMinutas = true
+    },
+    cambiarMinuta: function () {
+      this.traerMinuta(this.versionSeleccionada[0], this.versiones)
+      this.verVersion = this.versionSeleccionada[1]
+      this.cambiarMinutaEstado += 1
     },
     async obtenerMinutas (grupoId) {
       try {
@@ -190,11 +228,13 @@ export default {
         console.log('No fue posible obtener las faqs')
       }
     },
-    async traerMinuta (bitacoraId) {
+    async traerMinuta (bitacoraId, listaVersiones) {
       try {
         const response = await axios.get(this.apiUrl + '/minutas/' + bitacoraId, { headers: Auth.authHeader() })
         this.bitacora = response.data
+        this.versiones = listaVersiones
         this.mostrarFormulario = true
+        this.mostrarVersiones = true
       } catch {
         console.log('No fue posible obtener la información de la minuta seleccionada')
       }
