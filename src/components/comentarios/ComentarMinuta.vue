@@ -128,6 +128,7 @@ export default {
     establecerEstado: function () {
       if (this.validarAprobacion()) {
         this.enviarComentarios()
+        this.$emit('refrescar')
         this.$emit('cerrar')
         this.mostrarAprobacion = false
       }

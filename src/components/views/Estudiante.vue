@@ -44,7 +44,7 @@
         <div class="columns">
           <div class="column is-9"></div>
           <div class="column is-1">
-            <button class="button is-light-usach" @click="modificarModal" >Ayuda</button>
+            <button class="button is-light-usach" @click="modificarModal">Ayuda</button>
           </div>
           <div class="column is-2">
             <button class="button is-info-usach" @click="nuevaMinuta">Nueva Minuta</button>
@@ -87,7 +87,7 @@
     </div>
 
     <div v-else-if="verRevision">
-      <Comentar :id-bitacora="idRevision" @cerrar="mostrarTablero"/>
+      <Comentar :id-bitacora="idRevision" @cerrar="mostrarTablero" @refrescar="refrescarPagina"/>
     </div>
 
     <div v-else-if="verComentarios">
@@ -297,6 +297,10 @@ export default {
       this.valorActual = 0
       this.tableroEst++
     },
+    refrescarPagina: function () {
+      console.log('aaa')
+      location.reload()
+    },
     revisarComentarios: function (id) {
       this.idComentarios = id
       this.verComentarios = true
@@ -394,6 +398,7 @@ export default {
       this.obtenerMotivos()
       this.obtenerFaqs()
     }
+    console.log('re-render')
   }
 }
 </script>
