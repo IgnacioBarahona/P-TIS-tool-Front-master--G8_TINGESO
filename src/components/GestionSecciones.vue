@@ -10,7 +10,7 @@
                     <a class="button is-light-usach">Ayuda</a>
                 </p>
                 <p class="control" v-if="verFormulario">
-                    <a class="button is-info-usach">Asignar estudiante</a>
+                    <a class="button is-info-usach" @click="obtenerEstudiantesJornada()">Asignar estudiante</a>
                 </p>
             </div>
         </div>
@@ -72,37 +72,65 @@
                 <a class="button is-primary-usach">Actualizar</a>
               </div>
               <div class="control">
-                <a class="button is-light-usach">Cancelar</a>
+                <a class="button is-light-usach" @click="cerrarFormularios()">Cancelar</a>
               </div>
             </div>
           </div>
         </div>
-        <div v-if="mostrarListaEstudiantesSeccion">
-          <div class="has-text-left">
-            <label class="label">Estudiantes de la sección:</label>
-          </div>
-          <table class="table is-bordered is-narrow is-fullwidth" summary="Estudiantes">
-            <thead>
-              <tr class="has-background-light">
-                <th scope="col" class="has-text-centered">N°</th>
-                <th scope="col" class="has-text-centered">R.U.N</th>
-                <th scope="col" class="has-text-centered">Nombre estudiante</th>
-                <th scope="col" class="has-text-centered">Correo electrónico</th>
-                <th scope="col" class="has-text-centered"><input type="checkbox"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(estudiante, index) in listaEstudiantesSeccion" :key="estudiante.id" >
-                <th scope="row" class="has-text-centered">{{index + 1}}</th>
-                <td class="has-text-centered">{{visualizarRun(estudiante.run_est)}}</td>
-                <td class="has-text-centered">{{nombreCompleto(estudiante)}}</td>
-                <td class="has-text-centered">{{estudiante.correo}}</td>
-                <td class="has-text-centered"><input type="checkbox"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </form>
+    </div>
+    <!--Mostrar Lista Estudiantes de Seccion-->
+    <div v-if="mostrarListaEstudiantesSeccion">
+      <div class="has-text-left">
+        <label class="label">Estudiantes de la sección:</label>
+      </div>
+      <table class="table is-bordered is-narrow is-fullwidth" summary="Estudiantes">
+         <thead>
+          <tr class="has-background-light">
+            <th scope="col" class="has-text-centered">N°</th>
+            <th scope="col" class="has-text-centered">R.U.N</th>
+            <th scope="col" class="has-text-centered">Nombre estudiante</th>
+            <th scope="col" class="has-text-centered">Correo electrónico</th>
+            <th scope="col" class="has-text-centered"><input type="checkbox"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(estudiante, index) in listaEstudiantesSeccion" :key="estudiante.id" >
+            <th scope="row" class="has-text-centered">{{index + 1}}</th>
+            <td class="has-text-centered">{{visualizarRun(estudiante.run_est)}}</td>
+            <td class="has-text-centered">{{nombreCompleto(estudiante)}}</td>
+            <td class="has-text-centered">{{estudiante.correo}}</td>
+            <td class="has-text-centered"><input type="checkbox" v-model="listaEstudiantesId" :value="estudiante.id"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Mostrar Lista de Estudiantes Jornada -->
+    <br>
+    <div v-if="mostrarListaEstudiantesJornada">
+      <div class="has-text-left">
+        <label class="label">Estudiantes a asignar:</label>
+      </div>
+      <table class="table is-bordered is-narrow is-fullwidth" summary="Estudiantes">
+        <thead>
+          <tr class="has-background-light">
+            <th scope="col" class="has-text-centered">N°</th>
+            <th scope="col" class="has-text-centered">R.U.N</th>
+            <th scope="col" class="has-text-centered">Nombre estudiante</th>
+            <th scope="col" class="has-text-centered">Correo electrónico</th>
+            <th scope="col" class="has-text-centered"><input type="checkbox"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(estudiante, index) in listaEstudiantesJornada" :key="estudiante.id" >
+            <th scope="row" class="has-text-centered">{{index + 1}}</th>
+            <td class="has-text-centered">{{visualizarRun(estudiante.run_est)}}</td>
+            <td class="has-text-centered">{{nombreCompleto(estudiante)}}</td>
+            <td class="has-text-centered">{{estudiante.correo}}</td>
+            <td class="has-text-centered"><input type="checkbox" v-model="listaEstudiantesId" :value="estudiante.id"></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <!-- Mostrar Secciones -->
     <hr>
@@ -125,7 +153,7 @@
                     <td class="is-vcentered has-text-centered">{{seccion.codigo}}</td>
                     <td class="is-vcentered has-text-centered">{{seccion.semestre.numero}}/{{seccion.semestre.agno}}</td>
                     <td class="is-vcentered has-text-centered">{{seccion.curso.nombre}}</td>
-                    <td class="has-text-centered"><a class="button is-primary-usach" @click="cargarSeccion(seccion); obtenerEstudiantesSeccion(seccion)">Editar</a></td>
+                    <td class="has-text-centered"><a class="button is-primary-usach" @click="cargarSeccion(seccion)">Editar</a></td>
 
                 </tr>
             </tbody>
@@ -164,8 +192,14 @@ export default {
       },
       listaSecciones: [],
       listaEstudiantesSeccion: [],
+      listaEstudiantesId: [],
+      listaEstudiantesJornada: [],
+      listaEstudiantesJornadaId: [],
       mostrarLista: false,
       mostrarListaEstudiantesSeccion: false,
+      mostrarListaEstudiantesJornada: false,
+      mostrarMensajeListaVacia: false,
+      mensajeListaVacia: 'No se encuentran estudiantes',
       faqs_open: []
     }
   },
@@ -202,16 +236,29 @@ export default {
       this.seccion.jornada.nombre = seccion.jornada.nombre
       this.seccion.curso.nombre = seccion.curso.nombre
       this.verFormulario = true
-      this.mostrarListaEstudiantesSeccion = true
+      this.obtenerEstudiantesSeccion(seccion)
     },
     async obtenerEstudiantesSeccion (seccion) {
       try {
         const estudiantes = await axios.get(this.apiUrl + 'profesor/secciones/mostrar_secciones/' + seccion.id, { headers: Auth.authHeader() })
         this.listaEstudiantesSeccion = estudiantes.data
+        this.cerrarListasEstudiantes()
         if (Object.keys(this.listaEstudiantesSeccion).length > 0) {
-          this.mostrarListaEstudiantesSeccion = true
-        } else {
-          this.mostrarListaEstudiantesSeccion = false
+          this.listaEstudiantesId = this.convertirEstudiantes(this.listaEstudiantesSeccion)
+          this.visualizarEstudiantesSeccion()
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async obtenerEstudiantesJornada () {
+      try {
+        const estudiantes = await axios.get(this.apiUrl + 'profesor/secciones/estudiantes_jornada', { headers: Auth.authHeader() })
+        this.listaEstudiantesJornada = estudiantes.data
+        this.cerrarListasEstudiantes()
+        if (this.listaEstudiantesJornada.length > 0) {
+          this.listaEstudiantesJornadaId = this.convertirEstudiantes(this.listaEstudiantesJornada)
+          this.visualizarEstudiantesJornada()
         }
       } catch (error) {
         console.log(error)
@@ -222,6 +269,42 @@ export default {
     },
     visualizarRun: function (run) {
       return Funciones.visualizarRun(run)
+    },
+    visualizarFormulario: function () {
+      if (this.verFormulario === true) {
+        this.verFormulario = false
+      } else {
+        this.verFormulario = true
+      }
+    },
+    visualizarEstudiantesSeccion: function () {
+      if (this.mostrarListaEstudiantesSeccion === true) {
+        this.mostrarListaEstudiantesSeccion = false
+      } else {
+        this.mostrarListaEstudiantesSeccion = true
+      }
+    },
+    visualizarEstudiantesJornada: function () {
+      if (this.mostrarListaEstudiantesJornada === true) {
+        this.mostrarListaEstudiantesJornada = false
+      } else {
+        this.mostrarListaEstudiantesJornada = true
+      }
+    },
+    cerrarFormularios: function () {
+      this.verFormulario = false
+      this.cerrarListasEstudiantes()
+    },
+    cerrarListasEstudiantes: function () {
+      this.mostrarListaEstudiantesSeccion = false
+      this.mostrarListaEstudiantesJornada = false
+    },
+    convertirEstudiantes: function (listaEstudiantes) {
+      var lista = []
+      for (var i = 0; i < listaEstudiantes.length; i++) {
+        lista.push(listaEstudiantes[i].id)
+      }
+      return lista
     }
   },
   created () {
