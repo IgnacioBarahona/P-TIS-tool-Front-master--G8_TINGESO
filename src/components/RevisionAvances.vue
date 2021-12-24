@@ -98,7 +98,7 @@
     <div v-else>
 
       <br>
-      <RevisionSemanal :grupo="grupoSeleccionado" :minuta="bitacora"/>
+      <RevisionSemanal :grupo="grupoSeleccionado" :minuta="bitacora" v-if="grupoSeleccionado && bitacora"/>
 
       <div class="columns is-centered">
         <div class="column is-5">
