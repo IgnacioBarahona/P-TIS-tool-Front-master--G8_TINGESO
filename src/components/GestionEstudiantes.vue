@@ -158,7 +158,7 @@
               <div class="field">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    <select v-model="jornada_id" v-on:change="validarJornada" v-on:click="obtenerSecciones1(this.jornada_id)" :class="{ 'is-danger' : jornadaEntrada}">
+                    <select v-model="jornada_id" v-on:change="validarJornada" v-on:click="obtenerSeccionesXJornada(this.jornada_id)" :class="{ 'is-danger' : jornadaEntrada}">
                       <option v-for="jornada in jornadas" :key="jornada.id" :value="jornada.id">
                         {{ jornada.nombre }}
                       </option>
@@ -180,7 +180,7 @@
                 <div class="control">
                   <div class="select is-fullwidth">
                     <select v-model="estudiante.seccion_id" v-on:change="validarSeccion" :class="{ 'is-danger' : seccionEntrada}">
-                      <option v-for="seccion in secciones1" :key="seccion.id" :value="seccion.id">
+                      <option v-for="seccion in listaSecciones" :key="seccion.id" :value="seccion.id">
                         {{ seccion.codigo }}
                       </option>
                     </select>
@@ -377,7 +377,7 @@ export default {
       actualizarEstudiante: false,
       faqs_open: [],
       jornadas: [],
-      secciones1: [],
+      listaSecciones: [],
       jornada_id: 0
     }
   },
@@ -400,13 +400,15 @@ export default {
         console.log(error)
       }
     },
-    async obtenerSecciones1 (idJornada) {
-      try {
-        const Secciones = await axios.get(this.apiUrl + '/secciones1/' + idJornada, { headers: Auth.authHeader() })
-        this.secciones1 = Secciones.data
-        this.verSecciones = true
-      } catch (error) {
-        console.log(error)
+    async obtenerSeccionesXJornada (idJornada) {
+      if (idJornada !== 0) {
+        try {
+          const Secciones = await axios.get(this.apiUrl + '/secciones/' + idJornada, { headers: Auth.authHeader() })
+          this.listaSecciones = Secciones.data
+          this.verSecciones = true
+        } catch (error) {
+          console.log(error)
+        }
       }
     },
     async obtenerJornadas () {
