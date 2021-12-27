@@ -113,6 +113,23 @@
             </div>
           </div>
         </div>
+        <div class="columns has-text-left">
+          <div class="column is-4">
+            <div class="field">
+              <label class="label">Sección:</label>
+              <div class="control">
+                <div class="select is-fullwidth">
+                  <select v-model="estudiante.seccion_id" v-on:change="validarSeccion" :class="{ 'is-danger' : seccionEntrada}">
+                    <option v-for="seccion in secciones" :key="seccion.id" :value="seccion.id">
+                      {{ seccion.codigo }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <p class="is-danger help" v-if="seccionEntrada">No ha seleccionado la sección</p>
+            </div>
+          </div>
+        </div>
         <div class="columns">
           <div class="column is-12">
             <div class="field is-grouped is-grouped-centered">
@@ -132,7 +149,7 @@
       <br>
       <div class="columns is-4 is-centered">
 
-        <div class="column is-8">
+        <div class="column is-4">
           <div class="field is-horizontal">
             <div class="field-label-2c is-normal">
               <label class="label">Jornada:</label>
@@ -141,9 +158,30 @@
               <div class="field">
                 <div class="control">
                   <div class="select is-fullwidth">
+                    <select v-model="jornada_id" v-on:change="validarJornada" v-on:click="obtenerSecciones1(this.jornada_id)" :class="{ 'is-danger' : jornadaEntrada}">
+                      <option v-for="jornada in jornadas" :key="jornada.id" :value="jornada.id">
+                        {{ jornada.nombre }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <p class="is-danger help has-text-left" v-if="jornadaEntrada">No ha seleccionado la jornada</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="verSecciones" class="column is-3">
+          <div class="field is-horizontal">
+            <div class="field-label-2c is-normal">
+              <label class="label">Sección:</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <div class="select is-fullwidth">
                     <select v-model="estudiante.seccion_id" v-on:change="validarSeccion" :class="{ 'is-danger' : seccionEntrada}">
-                      <option v-for="seccion in secciones" :key="seccion.id" :value="seccion.id">
-                        {{ seccion.jornada.nombre }}
+                      <option v-for="seccion in secciones1" :key="seccion.id" :value="seccion.id">
+                        {{ seccion.codigo }}
                       </option>
                     </select>
                   </div>
@@ -317,6 +355,8 @@ export default {
         mensaje: ''
       },
       seccionEntrada: false,
+      jornadaEntrada: false,
+      verSecciones: false,
       mensajes: {
         sin_nombre: 'Debe ingresar el nombre del estudiante',
         sin_apellido: 'Debe ingresar el apellido del estudiante',
@@ -335,7 +375,10 @@ export default {
       nombreArchivo: 'No se ha subido el archivo',
       agregaArchivo: false,
       actualizarEstudiante: false,
-      faqs_open: []
+      faqs_open: [],
+      jornadas: [],
+      secciones1: [],
+      jornada_id: 0
     }
   },
   computed: {
@@ -353,6 +396,23 @@ export default {
       try {
         const secciones = await axios.get(this.apiUrl + '/secciones', { headers: Auth.authHeader() })
         this.$store.commit('setSecciones', secciones.data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async obtenerSecciones1 (idJornada) {
+      try {
+        const Secciones = await axios.get(this.apiUrl + '/secciones1/' + idJornada, { headers: Auth.authHeader() })
+        this.secciones1 = Secciones.data
+        this.verSecciones = true
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async obtenerJornadas () {
+      try {
+        const Jornadas = await axios.get(this.apiUrl + '/jornadas', { headers: Auth.authHeader() })
+        this.jornadas = Jornadas.data
       } catch (error) {
         console.log(error)
       }
@@ -588,6 +648,17 @@ export default {
         }
       }
     },
+    validarJornada: function () {
+      const seleccionada = this.jornada.id
+      if (seleccionada === null || seleccionada === undefined || seleccionada === '' || seleccionada === 0) {
+        this.jornadaEntrada = true
+        return false
+      } else {
+        this.jornadaEntrada = false
+        this.verSecciones = false
+        return true
+      }
+    },
     validarSeccion: function () {
       const seleccion = this.estudiante.seccion_id
       if (seleccion === null || seleccion === undefined || seleccion === '' || seleccion === 0) {
@@ -741,6 +812,7 @@ export default {
   created () {
     if (localStorage.user_tk) {
       this.obtenerSecciones()
+      this.obtenerJornadas()
       this.obtenerEstudiantes()
       this.obtenerAyuda()
     }
