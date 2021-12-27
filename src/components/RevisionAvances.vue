@@ -98,18 +98,7 @@
     <div v-else>
 
       <br>
-      <RevisionSemanal :grupo="grupoSeleccionado" :minuta="bitacora" v-if="grupoSeleccionado && bitacora"/>
-
-      <div class="columns is-centered">
-        <div class="column is-5">
-          <div class="field">
-            <div class="control">
-              <button class="button is-primary-usach is-fullwidth" @click="cerrarRevision">Volver</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <RevisionSemanal :grupo="grupoSeleccionado" :minuta="bitacora" :usuario="usuario" @cerrar="cerrarRevision" @comentar="emitirComentarios" v-if="grupoSeleccionado && bitacora"/>
     </div>
 
   </div>
@@ -139,11 +128,12 @@ export default {
       listaAvances: [],
       revisarMinuta: false,
       bitacora: {},
-      faqs_open: []
+      faqs_open: [],
+      comentarios: []
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'jornadaActual', 'faqsProfesor']),
+    ...mapState(['apiUrl', 'jornadaActual', 'faqsProfesor', 'usuario']),
 
     grupoElegido: function () {
       return Object.keys(this.grupoSeleccionado).length > 0
@@ -211,6 +201,23 @@ export default {
     },
     transformarPregunta: function (valor) {
       return Funciones.stringToHTML(valor)
+    },
+    emitirComentarios: function (comentarios) {
+      this.comentarios = comentarios
+      this.enviarComentarios()
+      this.cerrarRevision()
+    },
+    async enviarComentarios () {
+      const comentarios = {
+        id: this.id,
+        comentarios: this.comentarios
+      }
+      try {
+        await axios.post(this.apiUrl + '/comentarios', comentarios, { headers: Auth.postHeader() })
+      } catch (e) {
+        console.log('No fue posible enviar los comentarios')
+        console.log(e)
+      }
     }
   },
   created () {

@@ -22,25 +22,26 @@
           <ol type="1">
             <li v-for="(impedimento, index) in impedimentosPorEstudiante(estudiante.id)" :key="index">
               <p>{{ impedimento.descripcion }}</p>
-              <div v-if="!mostrarComentar[index]">
-                <a @click="abrirComentario(index, impedimento.id,'impedimento')">comentar</a>
-                <!-- <p>es {{sectionSelect.apartado}}</p> -->
-              </div>
-              <div v-else class="columns">
-                <div class="column is-12">
-                  <div class="content has-text-left">
-                    <div class="field is-grouped">
-                      <p class="control is-expanded has-icons-right">
-                        <input v-model="listaComentarios[index].comentario" class="input is-normal" type="text" @input="validarComentario">
-                        <span class="icon is-right">
-                          <button class="delete" @click="cerrarComentario(index)"></button>
-                        </span>
-                      </p>
+              <div v-if="usuario.rol.rango !== '3'">
+                <div v-if="!comentarioAbierto(index,estudiante.id,'impedimentos')">
+                  <a @click="abrirComentario(index, impedimento.id, estudiante.id, 'impedimentos')">comentar</a>
+                </div>
+                <div v-else class="columns">
+                  <div class="column is-12">
+                    <div class="content has-text-left">
+                      <div class="field is-grouped">
+                        <p class="control is-expanded has-icons-right">
+                          <input v-model="listaComentarios[encontrarIndice(index,estudiante.id,'impedimentos')].comentario" class="input is-normal" type="text">
+                          <span class="icon is-right">
+                            <button class="delete" @click="cerrarComentario(index,estudiante.id,'impedimentos')"></button>
+                          </span>
+                        </p>
+                      </div>
+                      <p class="is-danger help" v-if="entradas.comentarios">No se ha ingresado el comentario</p>
                     </div>
-                    <p class="is-danger help" v-if="entrada.comentarios">No se ha ingresado el comentario</p>
                   </div>
                 </div>
-            </div>
+              </div>
             </li>
           </ol>
         </div>
@@ -54,24 +55,26 @@
           <ol type="1">
             <li v-for="(logro, index) in logrosPorEstudiante(estudiante.id)" :key="index">
               <p>{{ logro.descripcion }}</p>
-              <div v-if="!mostrarComentar[index]">
-                <a @click="abrirComentario(index, logro.id,'logro')">comentar</a>
-              </div>
-              <div v-else class="columns">
-                <div class="column is-12">
-                  <div class="content has-text-left">
-                    <div class="field is-grouped">
-                      <p class="control is-expanded has-icons-right">
-                        <input v-model="listaComentarios[index].comentario" class="input is-normal" type="text" @input="validarComentario">
-                        <span class="icon is-right">
-                          <button class="delete" @click="cerrarComentario(index)"></button>
-                        </span>
-                      </p>
+              <div v-if="usuario.rol.rango !== '3'">
+                <div v-if="!comentarioAbierto(index,estudiante.id,'logros')">
+                  <a @click="abrirComentario(index, logro.id, estudiante.id,'logros')">comentar</a>
+                </div>
+                <div v-else class="columns">
+                  <div class="column is-12">
+                    <div class="content has-text-left">
+                      <div class="field is-grouped">
+                        <p class="control is-expanded has-icons-right">
+                          <input v-model="listaComentarios[encontrarIndice(index,estudiante.id,'logros')].comentario" class="input is-normal" type="text">
+                          <span class="icon is-right">
+                            <button class="delete" @click="cerrarComentario(index,estudiante.id,'logros')"></button>
+                          </span>
+                        </p>
+                      </div>
+                      <p class="is-danger help" v-if="entradas.comentarios">No se ha ingresado el comentario</p>
                     </div>
-                    <p class="is-danger help" v-if="entrada.comentarios">No se ha ingresado el comentario</p>
                   </div>
                 </div>
-            </div>
+              </div>
             </li>
           </ol>
         </div>
@@ -85,21 +88,23 @@
           <ol type="1">
             <li v-for="(meta, index) in metasPorEstudiante(estudiante.id)" :key="index">
               <p>{{ meta.descripcion }}</p>
-              <div v-if="!mostrarComentar[index]">
-                <a @click="abrirComentario(index, meta.id,'meta')">comentar</a>
-              </div>
-              <div v-else class="columns">
-              <div class="column is-12">
-                <div class="content has-text-left">
-                  <div class="field is-grouped">
-                    <p class="control is-expanded has-icons-right">
-                      <input v-model="listaComentarios[index].comentario" class="input is-normal" type="text" @input="validarComentario">
-                      <span class="icon is-right">
-                        <button class="delete" @click="cerrarComentario(index)"></button>
-                      </span>
-                    </p>
+              <div v-if="usuario.rol.rango !== '3'">
+                <div v-if="!comentarioAbierto(index,estudiante.id,'metas')">
+                  <a @click="abrirComentario(index, meta.id,estudiante.id,'metas')">comentar</a>
+                </div>
+                <div v-else class="columns">
+                <div class="column is-12">
+                  <div class="content has-text-left">
+                    <div class="field is-grouped">
+                      <p class="control is-expanded has-icons-right">
+                        <input v-model="listaComentarios[encontrarIndice(index,estudiante.id,'metas')].comentario" class="input is-normal" type="text" >
+                        <span class="icon is-right">
+                          <button class="delete" @click="cerrarComentario(index,estudiante.id,'metas')"></button>
+                        </span>
+                      </p>
+                    </div>
+                    <p class="is-danger help" v-if="entradas.comentarios">No se ha ingresado el comentario</p>
                   </div>
-                  <p class="is-danger help" v-if="entrada.comentarios">No se ha ingresado el comentario</p>
                 </div>
               </div>
             </div>
@@ -111,6 +116,28 @@
     <br>
 
   </div>
+
+  <div v-if="comented" class="columns">
+    <div class="column is-half is-offset-3">
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <a class="button is-primary-usach" @click="enviarComentarios">Enviar comentarios</a>
+        </div>
+        <div class="control">
+          <a class="button is-light-usach" @click="cerrarRevision">Cancelar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else class="columns is-centered">
+      <div class="column is-5">
+        <div class="field">
+          <div class="control">
+            <button class="button is-primary-usach is-fullwidth" @click="cerrarRevision">Volver</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- <div v-for="estudiante in grupoSeleccionado.estudiantes" :key="estudiante.id">
       <VisorEstudiante :est="estudiante" :logros="logrosPorEstudiante(estudiante.id)" :metas="metasPorEstudiante(estudiante.id)" :impedimentos="impedimentosPorEstudiante(estudiante.id)" :listaCom ="comentariosPorEstudiante(estudiante.id)"/>
@@ -132,14 +159,17 @@ export default {
     InfoAvance
     // VisorEstudiante
   },
-  props: ['grupo', 'minuta'],
+  props: ['grupo', 'minuta', 'usuario'],
   data () {
     return {
       grupoSeleccionado: this.grupo,
+      ayuda: 0,
+      ayuda2: 0,
       bitacora: this.minuta,
       itemsLogros: [],
       itemsMetas: [],
       itemsImpedimentos: [],
+      comented: false,
       listaGenerales: [],
       listaEntradas: [],
       listaComentarios: [],
@@ -148,11 +178,18 @@ export default {
         es_item: true,
         id_item: 0
       },
-      entrada: {
+      entradas: {
         error: false,
-        mensaje: ''
+        mensaje: '',
+        id_item: 0
       },
-      mostrarComentar: []
+      mostrarComentar: [],
+      mostrar: {
+        id_est: 0,
+        index_apartado: 0,
+        apartado: '',
+        state: false
+      }
     }
   },
   computed: {
@@ -189,9 +226,32 @@ export default {
     nombreCompleto: function (usuario) {
       return Funciones.nombreCompleto(usuario)
     },
-    abrirComentario: function (index, id) {
-      this.mostrarComentar[index] = true
+    abrirComentario: function (index, id, estudianteId, apartado) {
+      var i = this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
+      this.mostrarComentar[i].state = true
       this.listaComentarios[index].id_item = id
+      this.comented = true
+    },
+    cerrarComentario: function (index, estudianteId, apartado) {
+      var i = this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
+      this.mostrarComentar[i].state = false
+      this.listaComentarios[i].comentario = ''
+      this.listaEntradas[index].error = false
+      var open = 0
+      for (var j = 0; j < this.mostrarComentar.length; j++) {
+        if (this.mostrarComentar[j].state) {
+          open++
+        }
+      }
+      if (open === 0) {
+        this.comented = false
+      }
+    },
+
+    comentarioAbierto: function (index, estudianteId, apartado) {
+      var i = this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
+
+      return this.mostrarComentar[i].state
     },
     limpiarCampos: function () {
       this.mostrarComentar = []
@@ -202,23 +262,48 @@ export default {
       this.listaEntradas[index].error = false
       this.listaEntradas[index].mensaje = ''
     },
-    cerrarComentario: function (index) {
-      this.mostrarComentar[index] = false
-      this.listaComentarios[index].comentario = ''
-      this.listaEntradas[index].error = false
-    },
     crearListas: function () {
       this.limpiarCampos()
-      for (var i = 0; i < this.bitacora.minuta.items.length; i++) {
-        this.mostrarComentar.push(false)
-        this.listaComentarios.push(Object.assign({}, this.comentario))
-        this.listaEntradas.push(Object.assign({}, this.entrada))
+      for (const estudiante of this.grupoSeleccionado.estudiantes) {
+        var objectMostrar
+        var objectComentario
+        var impedimentos = this.impedimentosPorEstudiante(estudiante.id)
+        for (var i = 0; i < impedimentos.length; i++) {
+          objectMostrar = Object.assign({}, this.mostrar)
+          objectMostrar.id_est = estudiante.id
+          objectMostrar.index_apartado = i
+          objectMostrar.apartado = 'impedimentos'
+          this.mostrarComentar.push(objectMostrar)
+          objectComentario = Object.assign({}, this.comentario)
+          objectComentario.id_item = impedimentos[i].id
+          this.listaComentarios.push(objectComentario)
+        }
+        var logros = this.logrosPorEstudiante(estudiante.id)
+        for (var j = 0; j < logros.length; j++) {
+          objectMostrar = Object.assign({}, this.mostrar)
+          objectMostrar.id_est = estudiante.id
+          objectMostrar.index_apartado = j
+          objectMostrar.apartado = 'logros'
+          this.mostrarComentar.push(objectMostrar)
+          objectComentario = Object.assign({}, this.comentario)
+          objectComentario.id_item = logros[j].id
+          this.listaComentarios.push(objectComentario)
+        }
+        var metas = this.metasPorEstudiante(estudiante.id)
+        for (var k = 0; k < metas.length; k++) {
+          objectMostrar = Object.assign({}, this.mostrar)
+          objectMostrar.id_est = estudiante.id
+          objectMostrar.index_apartado = k
+          objectMostrar.apartado = 'metas'
+          this.mostrarComentar.push(objectMostrar)
+          objectComentario = Object.assign({}, this.comentario)
+          objectComentario.id_item = metas[k].id
+          this.listaComentarios.push(objectComentario)
+        }
       }
-    },
-    enviarComentarios: function () {
-      if (this.validarComentarios()) {
-        var comentarios = this.listaComentarios.concat(this.listaGenerales)
-        this.$emit('comentar', comentarios)
+      for (var l = 0; l < this.bitacora.minuta.items.length; l++) {
+        // this.listaComentarios.push(Object.assign({}, this.comentario))
+        this.listaEntradas.push(Object.assign({}, this.entradas))
       }
     },
     cancelarEnvio: function () {
@@ -230,11 +315,12 @@ export default {
         this.listaEntradas[i].mensaje = ''
       }
     },
-    validarComentarioItem: function (index) {
-      if (this.mostrarComentar[index]) {
-        if (this.listaComentarios[index].comentario === '' || this.listaComentarios[index].comentario === undefined) {
-          this.listaEntradas[index].error = true
-          this.listaEntradas[index].mensaje = 'Falta ingresar el comentario'
+    validarComentarioItem: function (index, itemId, estudianteId, apartado) {
+      if (this.comentarioAbierto(index, estudianteId, apartado)) {
+        var i = this.listaComentarios.findIndex(item => item.id_item === itemId)
+        if (this.listaComentarios[i].comentario === '' || this.listaComentarios[i].comentario === undefined) {
+          this.listaEntradas[i].error = true
+          this.listaEntradas[i].mensaje = 'Falta ingresar el comentario'
           return false
         } else {
           return true
@@ -242,16 +328,45 @@ export default {
       } else {
         return true
       }
+    },
+    validarListaComentarios: function () {
+      const comentarios = this.listaComentarios
+      var validacion = true
+      for (var i = 0; i < comentarios.length; i++) {
+        validacion = validacion && this.validarComentarioItem(i)
+      }
+      return validacion
+    },
+    enviarComentarios: function () {
+      if (this.validarListaComentarios()) {
+        var comentarios = this.listaComentarios
+        this.$emit('comentar', comentarios)
+      }
+    },
+    ordenarItemsPorEstudiante: function () {
+      var listaItems = []
+      for (const estudiante of this.grupoSeleccionado.estudiantes) {
+        listaItems = listaItems.concat(this.impedimentosPorEstudiante(estudiante.id), this.logrosPorEstudiante(estudiante.id), this.metasPorEstudiante(estudiante.id))
+      }
+      this.bitacora.minuta.items = listaItems
+    },
+    cerrarRevision: function () {
+      this.$emit('cerrar')
+    },
+    encontrarIndice: function (index, estudianteId, apartado) {
+      this.ayuda = this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
+      return this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
     }
   },
   created () {
     if (localStorage.user_tk) {
+      this.separarItems(this.bitacora.minuta.items)
       this.crearListas()
     }
   },
   mounted () {
     if (this.mostrarBitacora) {
-      this.separarItems(this.bitacora.minuta.items)
+      this.ordenarItemsPorEstudiante()
     }
   }
 }

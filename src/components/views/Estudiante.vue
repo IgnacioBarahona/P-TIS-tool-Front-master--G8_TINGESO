@@ -103,18 +103,7 @@
     </div>
 
     <div v-else-if="revisarSemanal">
-      <RevisionSemanal :grupo="grupo" :minuta="bitacoraAvance"/>
-
-      <br>
-      <div class="columns is-centered">
-        <div class="column is-5">
-          <div class="field">
-            <div class="control">
-              <button class="button is-primary-usach is-fullwidth" @click="cerrarAvance">Volver</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <RevisionSemanal :grupo="grupo" :minuta="bitacoraAvance" :usuario="usuario" @cerrar="cerrarAvance"/>
     </div>
 
     <div v-else-if="verMinuta">
