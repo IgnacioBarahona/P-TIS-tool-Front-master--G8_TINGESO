@@ -163,8 +163,7 @@ export default {
   data () {
     return {
       grupoSeleccionado: this.grupo,
-      ayuda: 0,
-      ayuda2: 0,
+      comentada: false,
       bitacora: this.minuta,
       itemsLogros: [],
       itemsMetas: [],
@@ -229,7 +228,7 @@ export default {
     abrirComentario: function (index, id, estudianteId, apartado) {
       var i = this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
       this.mostrarComentar[i].state = true
-      this.listaComentarios[index].id_item = id
+      // this.listaComentarios[index].id_item = id
       this.comented = true
     },
     cerrarComentario: function (index, estudianteId, apartado) {
@@ -315,12 +314,11 @@ export default {
         this.listaEntradas[i].mensaje = ''
       }
     },
-    validarComentarioItem: function (index, itemId, estudianteId, apartado) {
-      if (this.comentarioAbierto(index, estudianteId, apartado)) {
-        var i = this.listaComentarios.findIndex(item => item.id_item === itemId)
-        if (this.listaComentarios[i].comentario === '' || this.listaComentarios[i].comentario === undefined) {
-          this.listaEntradas[i].error = true
-          this.listaEntradas[i].mensaje = 'Falta ingresar el comentario'
+    validarComentarioItem: function (index) {
+      if (this.listaComentarios[index].state) {
+        if (this.listaComentarios[index].comentario === '' || this.listaComentarios[index].comentario === undefined) {
+          this.listaEntradas[index].error = true
+          this.listaEntradas[index].mensaje = 'Falta ingresar el comentario'
           return false
         } else {
           return true
@@ -339,7 +337,7 @@ export default {
     },
     enviarComentarios: function () {
       if (this.validarListaComentarios()) {
-        var comentarios = this.listaComentarios
+        var comentarios = this.listaComentarios.filter(item => item.comentario !== '')
         this.$emit('comentar', comentarios)
       }
     },

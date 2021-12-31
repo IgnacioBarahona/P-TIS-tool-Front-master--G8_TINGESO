@@ -129,7 +129,8 @@ export default {
       revisarMinuta: false,
       bitacora: {},
       faqs_open: [],
-      comentarios: []
+      comentarios: [],
+      id: 0
     }
   },
   computed: {
@@ -209,9 +210,11 @@ export default {
     },
     async enviarComentarios () {
       const comentarios = {
-        id: this.id,
-        comentarios: this.comentarios
+        id: this.bitacora.id,
+        comentarios: this.comentarios,
+        tipo_aprobacion_id: 2
       }
+      console.log(comentarios)
       try {
         await axios.post(this.apiUrl + '/comentarios', comentarios, { headers: Auth.postHeader() })
       } catch (e) {

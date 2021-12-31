@@ -111,6 +111,7 @@ export default {
         comentarios: this.comentarios,
         tipo_aprobacion_id: this.aprobacion
       }
+      console.log(comentarios)
       try {
         await axios.post(this.apiUrl + '/comentarios', comentarios, { headers: Auth.postHeader() })
       } catch (e) {

@@ -200,6 +200,36 @@
           </div>
         </div>
       </section>
+      <hr>
+      <section class="new-section">
+        <div class="container">
+          <p id="cliente" class="title is-5">Comentadas por el Profesor</p>
+          <table class="table is-fullwidth is-bordered is-narrow" v-if="mostrarComAvances" aria-describedby="cliente">
+            <thead>
+              <tr class="has-background-light">
+                <th class="has-text-centered" scope="col">N°</th>
+                <th class="has-text-centered" scope="col">Código</th>
+                <th class="has-text-centered" scope="col">Sprint</th>
+                <th class="has-text-centered" scope="col">Iniciada el</th>
+                <th class="has-text-centered" scope="col">Emitida el</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(bitacora, index) in comentadasAvances" :key="bitacora.id">
+                <th class="has-text-centered" scope="row">{{ index + 1}}</th>
+                <td><a @click="revisarAvance(bitacora)">{{ bitacora.minuta.codigo }}</a></td>
+                <td class="has-text-centered">{{ bitacora.minuta.numero_sprint }}</td>
+                <td class="has-text-centered">{{ convertirFecha(bitacora.minuta.creada_el)}}</td>
+                <td class="has-text-centered">{{ convertirFecha(bitacora.fecha_emision )}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>
+            <p class="subtitle is-5">Aquí se presentan las minutas semanales que han sido comentadas con observaciones de parte del Profesor</p>
+            <p class="subtitle is-5">Ahora no hay minutas de avance comentadas para mostrar.</p>
+          </div>
+        </div>
+      </section>
     </div>
 
     <div v-if="nombreTab === nombreTabs.respondidas">
@@ -374,6 +404,7 @@ export default {
       listaAvances: [],
       borradoresAvances: [],
       cerradasAvances: [],
+      comentadasAvances: [],
       contar: this.contador,
       minutaActual: this.seleccionado
     }
@@ -407,6 +438,9 @@ export default {
     },
     mostrarCerrAvances: function () {
       return this.cerradasAvances.length > 0
+    },
+    mostrarComAvances: function () {
+      return this.comentadasAvances.length > 0
     }
   },
   methods: {
@@ -453,6 +487,8 @@ export default {
             this.borradoresAvances.push(this.listaAvances[i])
           } else if (this.listaAvances[i].minuta.bitacora_estado.tipo_estado.abreviacion === 'CER') {
             this.cerradasAvances.push(this.listaAvances[i])
+          } else if (this.listaAvances[i].minuta.bitacora_estado.tipo_estado.abreviacion === 'CPF') {
+            this.comentadasAvances.push(this.listaAvances[i])
           }
         }
       }

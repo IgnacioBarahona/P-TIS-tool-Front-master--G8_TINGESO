@@ -272,9 +272,9 @@ export default {
     mostrarEmitir: function () {
       if (this.actualizarAvance) {
         if (this.bitacora.minuta.estudiante_id === this.estudiante.id) {
-          return this.bitacora.minuta.asistencia.length === this.grupo.estudiantes.length
+          return this.bitacora.minuta.asistencia.length - 1 === this.grupo.estudiantes.length
         } else {
-          return this.bitacora.minuta.asistencia.length >= this.grupo.estudiantes.length - 1
+          return this.bitacora.minuta.asistencia.length - 1 >= this.grupo.estudiantes.length - 1
         }
       } else {
         return false

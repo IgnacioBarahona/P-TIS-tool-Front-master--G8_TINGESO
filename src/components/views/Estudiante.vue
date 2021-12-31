@@ -287,7 +287,6 @@ export default {
       this.tableroEst++
     },
     refrescarPagina: function () {
-      console.log('aaa')
       location.reload()
     },
     revisarComentarios: function (id) {
