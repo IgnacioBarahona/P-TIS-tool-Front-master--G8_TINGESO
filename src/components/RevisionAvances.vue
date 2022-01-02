@@ -89,7 +89,7 @@
               <br>
               <p class="subtitle is-5 has-text-centered">No hay minutas de avance semanal para revisar en este grupo</p>
             </div>
-            <br>
+            <br><br>
             <div v-if="mostrarMinutasComentadas">
               <div class="field">
                 <div class="control">

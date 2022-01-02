@@ -43,7 +43,7 @@
                 </div>
               </div>
               <div v-if="buscarComentarioItem(impedimento.id)">
-                <article class="message is-warning">
+                <article class="message is-commentary">
                   <div class="message-header">
                     <p>Comentario del profesor</p>
                   </div>
@@ -86,7 +86,7 @@
                 </div>
               </div>
               <div v-if="buscarComentarioItem(logro.id)">
-                <article class="message is-warning">
+                <article class="message is-commentary">
                     <div class="message-header">
                       <p>Comentario del profesor</p>
                     </div>
@@ -129,7 +129,7 @@
               </div>
             </div>
             <div v-if="buscarComentarioItem(meta.id)">
-              <article class="message is-warning">
+              <article class="message is-commentary">
                   <div class="message-header">
                     <p>Comentario del profesor</p>
                   </div>
