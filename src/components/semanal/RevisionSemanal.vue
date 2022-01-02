@@ -22,7 +22,7 @@
           <ol type="1">
             <li v-for="(impedimento, index) in impedimentosPorEstudiante(estudiante.id)" :key="index">
               <p>{{ impedimento.descripcion }}</p>
-              <div v-if="usuario.rol.rango !== '3'">
+              <div v-if="usuario.rol.rango !== '3' && comentariosProfesor.length === 0">
                 <div v-if="!comentarioAbierto(index,estudiante.id,'impedimentos')">
                   <a @click="abrirComentario(index, impedimento.id, estudiante.id, 'impedimentos')">comentar</a>
                 </div>
@@ -42,6 +42,16 @@
                   </div>
                 </div>
               </div>
+              <div v-if="buscarComentarioItem(impedimento.id)">
+                <article class="message is-warning">
+                  <div class="message-header">
+                    <p>Comentario del profesor</p>
+                  </div>
+                  <div class="message-body">
+                    <p>{{ buscarComentarioItem(impedimento.id).comentario }}</p>
+                  </div>
+                </article>
+              </div>
             </li>
           </ol>
         </div>
@@ -55,7 +65,7 @@
           <ol type="1">
             <li v-for="(logro, index) in logrosPorEstudiante(estudiante.id)" :key="index">
               <p>{{ logro.descripcion }}</p>
-              <div v-if="usuario.rol.rango !== '3'">
+              <div v-if="usuario.rol.rango !== '3' && comentariosProfesor.length === 0">
                 <div v-if="!comentarioAbierto(index,estudiante.id,'logros')">
                   <a @click="abrirComentario(index, logro.id, estudiante.id,'logros')">comentar</a>
                 </div>
@@ -75,6 +85,16 @@
                   </div>
                 </div>
               </div>
+              <div v-if="buscarComentarioItem(logro.id)">
+                <article class="message is-warning">
+                    <div class="message-header">
+                      <p>Comentario del profesor</p>
+                    </div>
+                    <div class="message-body">
+                      <p>{{ buscarComentarioItem(logro.id).comentario }}</p>
+                    </div>
+                  </article>
+              </div>
             </li>
           </ol>
         </div>
@@ -88,7 +108,7 @@
           <ol type="1">
             <li v-for="(meta, index) in metasPorEstudiante(estudiante.id)" :key="index">
               <p>{{ meta.descripcion }}</p>
-              <div v-if="usuario.rol.rango !== '3'">
+              <div v-if="usuario.rol.rango !== '3' && comentariosProfesor.length === 0">
                 <div v-if="!comentarioAbierto(index,estudiante.id,'metas')">
                   <a @click="abrirComentario(index, meta.id,estudiante.id,'metas')">comentar</a>
                 </div>
@@ -107,6 +127,16 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div v-if="buscarComentarioItem(meta.id)">
+              <article class="message is-warning">
+                  <div class="message-header">
+                    <p>Comentario del profesor</p>
+                  </div>
+                  <div class="message-body">
+                    <p>{{ buscarComentarioItem(meta.id).comentario }}</p>
+                  </div>
+                </article>
             </div>
             </li>
           </ol>
@@ -148,6 +178,10 @@
 </template>
 
 <script>
+import Auth from '@/services/auth.js'
+import axios from 'axios'
+import { mapState } from 'vuex'
+
 import InfoAvance from '@/components/semanal/InfoAvance.vue'
 // import VisorEstudiante from '@/components/semanal/VisorEstudiante.vue'
 
@@ -188,10 +222,14 @@ export default {
         index_apartado: 0,
         apartado: '',
         state: false
-      }
+      },
+      comentariosProfesor: [],
+      verComentarios: []
     }
   },
   computed: {
+    ...mapState(['apiUrl']),
+
     mostrarBitacora: function () {
       return Object.keys(this.bitacora).length > 0
     }
@@ -354,11 +392,29 @@ export default {
     encontrarIndice: function (index, estudianteId, apartado) {
       this.ayuda = this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
       return this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
+    },
+    async obtenerComentarios (bitacoraId) {
+      console.log(bitacoraId)
+      try {
+        const response = await axios.get(this.apiUrl + '/comentarios/' + bitacoraId, { headers: Auth.authHeader() })
+        this.comentariosProfesor = response.data
+      } catch (e) {
+        console.log('No fue posible obtener los comentarios de la minuta')
+        console.log(e)
+      }
+    },
+    buscarIniciales: function (asistenciaId) {
+      console.log(asistenciaId)
+      return Funciones.buscarIniciales(this.bitacora.minuta.asistencia, asistenciaId)
+    },
+    buscarComentarioItem: function (idItem) {
+      return this.comentariosProfesor.find(item => item.id_item === idItem)
     }
   },
   created () {
     if (localStorage.user_tk) {
       this.separarItems(this.bitacora.minuta.items)
+      this.obtenerComentarios(this.bitacora.id)
       this.crearListas()
     }
   },

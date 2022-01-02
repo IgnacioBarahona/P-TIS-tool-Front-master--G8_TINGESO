@@ -274,7 +274,7 @@ export default {
         if (this.bitacora.minuta.estudiante_id === this.estudiante.id) {
           return this.bitacora.minuta.asistencia.length - 1 === this.grupo.estudiantes.length
         } else {
-          return this.bitacora.minuta.asistencia.length - 1 >= this.grupo.estudiantes.length - 1
+          return this.bitacora.minuta.asistencia.length - 1 >= this.grupo.estudiantes.length
         }
       } else {
         return false
