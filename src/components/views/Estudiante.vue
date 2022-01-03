@@ -121,6 +121,10 @@
       <RevisarMinuta :id-bitacora="idVerMinuta" @cerrar="cerrarMinuta"/>
     </div>
 
+    <div v-else-if="verChatGrupal">
+      <ChatGrupal/>
+    </div>
+
   </div>
 </template>
 
@@ -134,6 +138,7 @@ import Emision from '@/components/comentarios/NuevaMinuta.vue'
 import Semanal from '@/components/semanal/Semanal.vue'
 import RevisionSemanal from '@/components/semanal/RevisionSemanal.vue'
 import RevisarMinuta from '@/components/comentarios/RevisarMinuta.vue'
+import ChatGrupal from '@/components/ChatGrupal.vue'
 
 import axios from 'axios'
 import Auth from '@/services/auth.js'
@@ -151,7 +156,8 @@ export default {
     Emision,
     Semanal,
     RevisionSemanal,
-    RevisarMinuta
+    RevisarMinuta,
+    ChatGrupal
   },
   data () {
     return {
@@ -173,6 +179,7 @@ export default {
       verSemanal: false,
       verMinuta: false,
       revisarSemanal: false,
+      verChatGrupal: false,
       idMotivo: 0,
       nuevaRevision: '',
       esNuevaEmision: false,
