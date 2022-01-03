@@ -121,14 +121,15 @@
     <!--Mostrar Lista Estudiantes de Seccion-->
     <div v-if="mostrarListaEstudiantesSeccion">
       <div class="has-text-left">
-        <label class="label">Estudiantes de la sección:</label>
-        <span
+        <label class="label">Estudiantes de la sección:
+          <span
           id="icono-ayuda"
           ayuda="Estudiantes que pertenecen a la sección"
           class="icon is-large"
         >
           <i class="far fa-question-circle"></i>
         </span>
+        </label>
       </div>
       <table
         class="table is-bordered is-narrow is-fullwidth"
@@ -161,7 +162,15 @@
     <br />
     <div v-if="mostrarListaEstudiantesJornada">
       <div class="has-text-left">
-        <label class="label">Estudiantes a asignar:</label>
+        <label class="label">Estudiantes a asignar:
+          <span
+          id="icono-ayuda"
+          ayuda="Estudiantes que no pertenecen a la sección, pero pertenecen a la misma jornada y semestre"
+          class="icon is-large"
+        >
+          <i class="far fa-question-circle"></i>
+        </span>
+        </label>
       </div>
       <table
         class="table is-bordered is-narrow is-fullwidth"
@@ -447,12 +456,12 @@ export default {
           } catch (error) {
             console.log(error)
           }
+          this.visualizarAsignacionExitosa()
         }
       } else {
         console.log('No hay estudiantes que asignar a la sección')
       }
       this.cerrarFormularios()
-      this.visualizarAsignacionExitosa()
     },
     actualizarEstudiantes: function () {
       this.notificar = true
