@@ -336,6 +336,7 @@ export default {
       this.tableroEst++
     },
     cerrarSemanal: function () {
+      this.bitacoraAvance = {}
       this.verSemanal = false
       this.mostrarTablero()
     },

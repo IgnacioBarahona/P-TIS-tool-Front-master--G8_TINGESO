@@ -37,7 +37,7 @@
                           </span>
                         </p>
                       </div>
-                      <p class="is-danger help" v-if="entradas.comentarios">No se ha ingresado el comentario</p>
+                      <p v-if="this.listaEntradas[encontrarIndice(index,estudiante.id,'impedimentos')].error" class="is-danger help">{{ this.listaEntradas[encontrarIndice(index,estudiante.id,'impedimentos')].mensaje }}</p>
                     </div>
                   </div>
                 </div>
@@ -80,7 +80,7 @@
                           </span>
                         </p>
                       </div>
-                      <p class="is-danger help" v-if="entradas.comentarios">No se ha ingresado el comentario</p>
+                      <p v-if="this.listaEntradas[encontrarIndice(index,estudiante.id,'impedimentos')].error" class="is-danger help">{{ this.listaEntradas[encontrarIndice(index,estudiante.id,'impedimentos')].mensaje }}</p>
                     </div>
                   </div>
                 </div>
@@ -123,7 +123,7 @@
                         </span>
                       </p>
                     </div>
-                    <p class="is-danger help" v-if="entradas.comentarios">No se ha ingresado el comentario</p>
+                    <p v-if="this.listaEntradas[encontrarIndice(index,estudiante.id,'impedimentos')].error" class="is-danger help">{{ this.listaEntradas[encontrarIndice(index,estudiante.id,'impedimentos')].mensaje }}</p>
                   </div>
                 </div>
               </div>
@@ -273,7 +273,7 @@ export default {
       var i = this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
       this.mostrarComentar[i].state = false
       this.listaComentarios[i].comentario = ''
-      this.listaEntradas[index].error = false
+      this.listaEntradas[i].error = false
       var open = 0
       for (var j = 0; j < this.mostrarComentar.length; j++) {
         if (this.mostrarComentar[j].state) {
@@ -353,7 +353,7 @@ export default {
       }
     },
     validarComentarioItem: function (index) {
-      if (this.listaComentarios[index].state) {
+      if (this.mostrarComentar[index].state) {
         if (this.listaComentarios[index].comentario === '' || this.listaComentarios[index].comentario === undefined) {
           this.listaEntradas[index].error = true
           this.listaEntradas[index].mensaje = 'Falta ingresar el comentario'
@@ -374,6 +374,9 @@ export default {
       return validacion
     },
     enviarComentarios: function () {
+      for (var i = 0; i < this.listaComentarios.length; i++) {
+        this.listaComentarios[i].comentario = this.listaComentarios[i].comentario.trim()
+      }
       if (this.validarListaComentarios()) {
         var comentarios = this.listaComentarios.filter(item => item.comentario !== '')
         this.$emit('comentar', comentarios)
