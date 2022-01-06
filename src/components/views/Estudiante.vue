@@ -41,8 +41,11 @@
 
       <div v-else>
 
-        <div class="columns">
-          <div class="column is-9"></div>
+        <div class="columns is-gapless">
+          <div class="column is-8"></div>
+          <!--<div class="column is-1">
+            <button class="button" @click="abrirChat">Chat</button>
+          </div>-->
           <div class="column is-1">
             <button class="button is-light-usach" @click="modificarModal">Ayuda</button>
           </div>
@@ -120,7 +123,9 @@
     <div v-else-if="verMinuta">
       <RevisarMinuta :id-bitacora="idVerMinuta" @cerrar="cerrarMinuta"/>
     </div>
-
+    <div v-else-if="verChatGrupal">
+      <ChatGrupal />
+    </div>
   </div>
 </template>
 
@@ -134,6 +139,7 @@ import Emision from '@/components/comentarios/NuevaMinuta.vue'
 import Semanal from '@/components/semanal/Semanal.vue'
 import RevisionSemanal from '@/components/semanal/RevisionSemanal.vue'
 import RevisarMinuta from '@/components/comentarios/RevisarMinuta.vue'
+import ChatGrupal from '@/components/ChatGrupal.vue'
 
 import axios from 'axios'
 import Auth from '@/services/auth.js'
@@ -151,7 +157,8 @@ export default {
     Emision,
     Semanal,
     RevisionSemanal,
-    RevisarMinuta
+    RevisarMinuta,
+    ChatGrupal
   },
   data () {
     return {
@@ -173,6 +180,7 @@ export default {
       verSemanal: false,
       verMinuta: false,
       revisarSemanal: false,
+      verChatGrupal: false,
       idMotivo: 0,
       nuevaRevision: '',
       esNuevaEmision: false,
@@ -374,6 +382,13 @@ export default {
       this.verMinuta = false
       this.idVerMinuta = 0
       this.mostrarTablero()
+    },
+    abrirChat: function () {
+      if (this.verChatGrupal === false) {
+        this.verChatGrupal = true
+      } else {
+        this.verChatGrupal = false
+      }
     },
     revisionesPorEstados: function (identificador) {
       this.revisionEstado = Funciones.convertirRevisionAEstado(identificador)

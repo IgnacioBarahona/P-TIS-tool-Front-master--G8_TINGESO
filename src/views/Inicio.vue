@@ -41,8 +41,8 @@
                   <i class="far fa-eye-slash"></i>
                 </span>
               </button>
-                <p class="help is-danger" v-bind:style="{ display: displayText }">Usuario o contraseña incorrectos</p>
             </div>
+            <p class="help is-danger" v-bind:style="{ display: displayText }">Usuario o contraseña incorrectos</p>
             <br>
           </div>
 

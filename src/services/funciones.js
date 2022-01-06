@@ -124,12 +124,16 @@ export default {
     return lista
   },
   visualizarRun (run) {
-    const separar = run.split('-')
-    const lista = []
-    lista.push(separar[0].slice(-9, -6))
-    lista.push(separar[0].slice(-6, -3))
-    lista.push(separar[0].slice(-3))
-    return lista.join('.') + '-' + separar[1]
+    if (run != null) {
+      const separar = run.split('-')
+      const lista = []
+      lista.push(separar[0].slice(-9, -6))
+      lista.push(separar[0].slice(-6, -3))
+      lista.push(separar[0].slice(-3))
+      return lista.join('.') + '-' + separar[1]
+    } else {
+      return ''
+    }
   },
   sinComentarios (listaComentarios) {
     if (listaComentarios.length === 0) {
