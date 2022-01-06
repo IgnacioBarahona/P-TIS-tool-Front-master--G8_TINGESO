@@ -105,6 +105,14 @@ export default {
         console.log(e)
       }
     },
+    async VerificarAprobaciones () {
+      try {
+        await axios.get(this.apiUrl + '/verificar/' + this.idBitacora, { headers: Auth.postHeader() })
+      } catch (e) {
+        console.log('No fue posible verificar las aprobaciones')
+        console.log(e)
+      }
+    },
     async enviarComentarios () {
       const comentarios = {
         id: this.id,
@@ -129,6 +137,9 @@ export default {
     establecerEstado: function () {
       if (this.validarAprobacion()) {
         this.enviarComentarios()
+        if (this.aprobacion === 1 || this.aprobacion === 2) {
+          this.VerificarAprobaciones()
+        }
         this.$emit('refrescar')
         this.$emit('cerrar')
         this.mostrarAprobacion = false
