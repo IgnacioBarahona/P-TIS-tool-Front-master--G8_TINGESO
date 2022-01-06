@@ -102,14 +102,14 @@
               <label class="label">Jornada:</label>
               <div class="control">
                 <div class="select is-fullwidth">
-                  <select v-model="estudiante.seccion_id" v-on:change="validarSeccion" :class="{ 'is-danger' : seccionEntrada}">
-                    <option v-for="seccion in secciones" :key="seccion.id" :value="seccion.id">
-                      {{ seccion.jornada.nombre }}
+                  <select v-model="jornada_id" v-on:change="validarJornada" v-on:click="obtenerSeccionesXJornada(this.jornada_id)" :class="{ 'is-danger' : jornadaEntrada}">
+                    <option v-for="jornada in jornadas" :key="jornada.id" :value="jornada.id">
+                      {{ jornada.nombre }}
                     </option>
                   </select>
                 </div>
               </div>
-              <p class="is-danger help" v-if="seccionEntrada">No ha seleccionado la sección</p>
+              <p class="is-danger help" v-if="jornadaEntrada">No ha seleccionado la jornada</p>
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@
               <div class="control">
                 <div class="select is-fullwidth">
                   <select v-model="estudiante.seccion_id" v-on:change="validarSeccion" :class="{ 'is-danger' : seccionEntrada}">
-                    <option v-for="seccion in secciones" :key="seccion.id" :value="seccion.id">
+                    <option v-for="seccion in listaSecciones" :key="seccion.id" :value="seccion.id">
                       {{ seccion.codigo }}
                     </option>
                   </select>
@@ -170,7 +170,7 @@
             </div>
           </div>
         </div>
-        <div v-if="verSecciones" class="column is-3">
+        <div class="column is-3">
           <div class="field is-horizontal">
             <div class="field-label-2c is-normal">
               <label class="label">Sección:</label>
@@ -378,7 +378,7 @@ export default {
       faqs_open: [],
       jornadas: [],
       listaSecciones: [],
-      jornada_id: 0
+      jornada_id: null
     }
   },
   computed: {
@@ -404,6 +404,7 @@ export default {
       if (idJornada !== 0) {
         try {
           const Secciones = await axios.get(this.apiUrl + '/secciones/' + idJornada, { headers: Auth.authHeader() })
+          this.estudiante.seccion_id = null
           this.listaSecciones = Secciones.data
           this.verSecciones = true
         } catch (error) {
@@ -511,6 +512,8 @@ export default {
       this.emailEntrada.error = false
       this.seccionEntrada = false
       this.mostrarNomina = false
+      this.jornada_id = null
+      this.estudiante.seccion_id = null
     },
     validarNombre: function () {
       const regExp = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/g
@@ -651,7 +654,7 @@ export default {
       }
     },
     validarJornada: function () {
-      const seleccionada = this.jornada.id
+      const seleccionada = this.jornada_id
       if (seleccionada === null || seleccionada === undefined || seleccionada === '' || seleccionada === 0) {
         this.jornadaEntrada = true
         return false
@@ -751,6 +754,7 @@ export default {
     },
     validarIngresoNomina: function () {
       let validacion = true
+      validacion = validacion && this.validarJornada()
       validacion = validacion && this.validarSeccion()
       validacion = validacion && this.validarArchivo()
       return validacion
