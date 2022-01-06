@@ -89,6 +89,40 @@
               <br>
               <p class="subtitle is-5 has-text-centered">No hay minutas de avance semanal para revisar en este grupo</p>
             </div>
+            <br><br>
+            <div v-if="mostrarMinutasComentadas">
+              <div class="field">
+                <div class="control">
+                  <label id="avances" class="label">Minutas de avance semanal ya comentadas</label>
+                </div>
+              </div>
+              <div>
+                <table class="table is-bordered is-fullwidth is-narrow" aria-describedby="avances">
+                  <thead>
+                    <tr class="has-background-light">
+                      <th scope="col" class="has-text-centered">N°</th>
+                      <th scope="col" class="has-text-centered">Código minuta</th>
+                      <th scope="col" class="has-text-centered">Sprint</th>
+                      <th scope="col" class="has-text-centered">Creada el</th>
+                      <th scope="col" class="has-text-centered">Emitida el</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(bitacora, index) in listaComentadas" :key="bitacora.id">
+                      <th class="has-text-centered" scope="row">{{ index + 1 }}</th>
+                      <td><a @click="revisarAvance(bitacora)">{{ bitacora.minuta.codigo }}</a></td>
+                      <td class="has-text-centered">{{ bitacora.minuta.numero_sprint }}</td>
+                      <td class="has-text-centered">{{ convertirFecha(bitacora.minuta.creada_el) }}</td>
+                      <td class="has-text-centered">{{ convertirFecha(bitacora.fecha_emision) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div v-else>
+              <br>
+              <p class="subtitle is-5 has-text-centered">No hay minutas de avance semanal comentadas para revisar grupo</p>
+            </div>
           </div>
         </div>
       </div>
@@ -98,18 +132,7 @@
     <div v-else>
 
       <br>
-      <RevisionSemanal :grupo="grupoSeleccionado" :minuta="bitacora"/>
-
-      <div class="columns is-centered">
-        <div class="column is-5">
-          <div class="field">
-            <div class="control">
-              <button class="button is-primary-usach is-fullwidth" @click="cerrarRevision">Volver</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <RevisionSemanal :grupo="grupoSeleccionado" :minuta="bitacora" :usuario="usuario" @cerrar="cerrarRevision" @comentar="emitirComentarios" v-if="grupoSeleccionado && bitacora"/>
     </div>
 
   </div>
@@ -137,13 +160,16 @@ export default {
       help: false,
       grupoSeleccionado: {},
       listaAvances: [],
+      listaAvancesComentados: [],
       revisarMinuta: false,
       bitacora: {},
-      faqs_open: []
+      faqs_open: [],
+      comentarios: [],
+      id: 0
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'jornadaActual', 'faqsProfesor']),
+    ...mapState(['apiUrl', 'jornadaActual', 'faqsProfesor', 'usuario']),
 
     grupoElegido: function () {
       return Object.keys(this.grupoSeleccionado).length > 0
@@ -151,10 +177,22 @@ export default {
     mostrarMinutas: function () {
       return this.listaFiltrada.length > 0
     },
+    mostrarMinutasComentadas: function () {
+      return this.listaComentadas.length > 0
+    },
     listaFiltrada: function () {
       var lista = []
       for (var i = 0; i < this.listaAvances.length; i++) {
         if (this.listaAvances[i].minuta.bitacora_estado.tipo_estado.abreviacion === 'CER') {
+          lista.push(this.listaAvances[i])
+        }
+      }
+      return lista
+    },
+    listaComentadas: function () {
+      var lista = []
+      for (var i = 0; i < this.listaAvances.length; i++) {
+        if (this.listaAvances[i].minuta.bitacora_estado.tipo_estado.abreviacion === 'CPF') {
           lista.push(this.listaAvances[i])
         }
       }
@@ -211,6 +249,25 @@ export default {
     },
     transformarPregunta: function (valor) {
       return Funciones.stringToHTML(valor)
+    },
+    emitirComentarios: function (comentarios) {
+      this.comentarios = comentarios
+      this.enviarComentarios()
+      this.cerrarRevision()
+    },
+    async enviarComentarios () {
+      const comentarios = {
+        id: this.bitacora.id,
+        comentarios: this.comentarios,
+        tipo_aprobacion_id: 2
+      }
+      console.log(comentarios)
+      try {
+        await axios.post(this.apiUrl + '/comentarios', comentarios, { headers: Auth.postHeader() })
+      } catch (e) {
+        console.log('No fue posible enviar los comentarios')
+        console.log(e)
+      }
     }
   },
   created () {

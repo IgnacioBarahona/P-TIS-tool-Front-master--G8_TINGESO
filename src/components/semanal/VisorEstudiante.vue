@@ -57,13 +57,14 @@ import Funciones from '@/services/funciones.js'
 
 export default {
   name: 'VisorEstudiante',
-  props: ['est', 'logros', 'metas', 'impedimentos'],
+  props: ['est', 'logros', 'metas', 'impedimentos', 'listaCom'],
   data () {
     return {
       estudiante: this.est,
       listaLogros: this.logros,
       listaMetas: this.metas,
-      listaImpedimentos: this.impedimentos
+      listaImpedimentos: this.impedimentos,
+      comentariosMinuta: this.listaCom
     }
   },
   methods: {

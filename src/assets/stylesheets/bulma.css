@@ -5692,6 +5692,20 @@ button.dropdown-item.is-active {
   color: #947600;
 }
 
+.message.is-commentary {
+  background-color: #fffbeb;
+}
+
+.message.is-commentary .message-header {
+  background-color: #002f6c;
+  color: #fff;
+}
+
+.message.is-commentary .message-body {
+  border-color: #ffdd57;
+  color: #040404;
+}
+
 .message.is-danger {
   background-color: #feecf0;
 }
