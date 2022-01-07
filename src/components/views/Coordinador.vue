@@ -11,6 +11,7 @@
           <li :class="{ 'is-active-usach' : nombreTabActiva === nombreTabs.Avances}" @click="elegirTab(nombreTabs.Avances)"><a><strong>Revisar Avances</strong></a></li>
           <li :class="{ 'is-active-usach' : nombreTabActiva === nombreTabs.Estadisticas}" @click="elegirTab(nombreTabs.Estadisticas)"><a><strong>Estadísticas</strong></a></li>
           <li :class="{ 'is-active-usach' : nombreTabActiva === nombreTabs.Profesores }" @click="elegirTab(nombreTabs.Profesores)"><a><strong>Profesores</strong></a></li>
+          <li :class="{ 'is-active-usach' : nombreTabActiva === nombreTabs.Seccciones }" @click="elegirTab(nombreTabs.Secciones)"><a><strong>Secciones</strong></a></li>
         </ul>
       </div>
     </nav>
@@ -21,6 +22,7 @@
     <GestionClientes v-else-if="nombreTabActiva === nombreTabs.Stakeholders"/>
     <GestionProfesores v-else-if="nombreTabActiva === nombreTabs.Profesores"/>
     <EstadisticasGrupo v-else-if="nombreTabActiva === nombreTabs.Estadisticas"/>
+    <GestionSeccionesCoordinador v-else-if="nombreTabActiva === nombreTabs.Secciones"/>
 
   </div>
 </template>
@@ -31,6 +33,7 @@ import GestionGrupos from '@/components/GestionGrupos.vue'
 import RevisionMinutas from '@/components/RevisionMinutas.vue'
 import GestionClientes from '@/components/GestionClientes.vue'
 import GestionProfesores from '@/components/GestionProfesores.vue'
+import GestionSeccionesCoordinador from '@/components/GestionSeccionesCoordinador.vue'
 import RevisionAvances from '@/components/RevisionAvances.vue'
 import EstadisticasGrupo from '@/components/EstadisticasGrupo.vue'
 
@@ -41,7 +44,8 @@ const nombreTabs = {
   Stakeholders: 'clientes',
   Profesores: 'profesores',
   Avances: 'avances',
-  Estadisticas: 'estadisticas'
+  Estadisticas: 'estadisticas',
+  Secciones: 'secciones'
 }
 
 export default {
@@ -53,7 +57,8 @@ export default {
     GestionClientes,
     GestionProfesores,
     RevisionAvances,
-    EstadisticasGrupo
+    EstadisticasGrupo,
+    GestionSeccionesCoordinador
   },
   data () {
     return {
