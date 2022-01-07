@@ -77,7 +77,7 @@
                       <td><a @click="traerMinuta(bitacora.id_rev[0][0], bitacora.id_rev)">{{ bitacora.minuta.codigo }}</a></td>
                       <td class="has-text-centered">{{ actualizarTipo(bitacora.minuta.tipo) }}</td>
                       <td class="has-text-centered">{{ convertirRevision(bitacora.identificador) }}</td>
-                      <td class="has-text-centered">{{ bitacora.minuta.creada_por[0] }}</td>
+                      <td class="has-text-centered">{{ bitacora.minuta.creada_por }}</td>
                     </tr>
                   </tbody>
                 </table>
