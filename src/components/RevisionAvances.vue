@@ -132,7 +132,7 @@
     <div v-else>
 
       <br>
-      <RevisionSemanal :grupo="grupoSeleccionado" :minuta="bitacora" :usuario="usuario" @cerrar="cerrarRevision" @comentar="emitirComentarios" v-if="grupoSeleccionado && bitacora"/>
+      <RevisionSemanal :grupo="grupoSeleccionado" :minuta="bitacora" :usuario_rol="usuario.rol.rango" @cerrar="cerrarRevision" @comentar="emitirComentarios" v-if="grupoSeleccionado && bitacora"/>
     </div>
 
   </div>

@@ -22,7 +22,7 @@
           <ol type="1">
             <li v-for="(impedimento, index) in impedimentosPorEstudiante(estudiante.id)" :key="index">
               <p>{{ impedimento.descripcion }}</p>
-              <div v-if="usuario.rol.rango !== '3' && comentariosProfesor.length === 0">
+              <div v-if="usuario_rol !== '3' && comentariosProfesor.length === 0">
                 <div v-if="!comentarioAbierto(index,estudiante.id,'impedimentos')">
                   <a @click="abrirComentario(index, impedimento.id, estudiante.id, 'impedimentos')">comentar</a>
                 </div>
@@ -65,7 +65,7 @@
           <ol type="1">
             <li v-for="(logro, index) in logrosPorEstudiante(estudiante.id)" :key="index">
               <p>{{ logro.descripcion }}</p>
-              <div v-if="usuario.rol.rango !== '3' && comentariosProfesor.length === 0">
+              <div v-if="usuario_rol !== '3' && comentariosProfesor.length === 0">
                 <div v-if="!comentarioAbierto(index,estudiante.id,'logros')">
                   <a @click="abrirComentario(index, logro.id, estudiante.id,'logros')">comentar</a>
                 </div>
@@ -108,7 +108,7 @@
           <ol type="1">
             <li v-for="(meta, index) in metasPorEstudiante(estudiante.id)" :key="index">
               <p>{{ meta.descripcion }}</p>
-              <div v-if="usuario.rol.rango !== '3' && comentariosProfesor.length === 0">
+              <div v-if="usuario_rol !== '3' && comentariosProfesor.length === 0">
                 <div v-if="!comentarioAbierto(index,estudiante.id,'metas')">
                   <a @click="abrirComentario(index, meta.id,estudiante.id,'metas')">comentar</a>
                 </div>
@@ -193,7 +193,7 @@ export default {
     InfoAvance
     // VisorEstudiante
   },
-  props: ['grupo', 'minuta', 'usuario'],
+  props: ['grupo', 'minuta', 'usuario_rol'],
   data () {
     return {
       grupoSeleccionado: this.grupo,
@@ -203,7 +203,6 @@ export default {
       itemsMetas: [],
       itemsImpedimentos: [],
       comented: false,
-      listaGenerales: [],
       listaEntradas: [],
       listaComentarios: [],
       comentario: {
@@ -288,12 +287,14 @@ export default {
     comentarioAbierto: function (index, estudianteId, apartado) {
       var i = this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
 
+      if (i === -1) {
+        return false
+      }
       return this.mostrarComentar[i].state
     },
     limpiarCampos: function () {
       this.mostrarComentar = []
       this.listaComentarios = []
-      this.listaGenerales = []
     },
     limpiarErrorItem: function (index) {
       this.listaEntradas[index].error = false
@@ -397,7 +398,6 @@ export default {
       return this.mostrarComentar.findIndex(item => item.id_est === estudianteId && item.index_apartado === index && item.apartado === apartado)
     },
     async obtenerComentarios (bitacoraId) {
-      console.log(bitacoraId)
       try {
         const response = await axios.get(this.apiUrl + '/comentarios/' + bitacoraId, { headers: Auth.authHeader() })
         this.comentariosProfesor = response.data

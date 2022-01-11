@@ -5693,7 +5693,7 @@ button.dropdown-item.is-active {
 }
 
 .message.is-commentary {
-  background-color: #fffbeb;
+  background-color: #fff;
 }
 
 .message.is-commentary .message-header {
@@ -5702,8 +5702,9 @@ button.dropdown-item.is-active {
 }
 
 .message.is-commentary .message-body {
-  border-color: #ffdd57;
+  border-color: #002f6c;
   color: #040404;
+  background-color: #fafafa;
 }
 
 .message.is-danger {
