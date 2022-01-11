@@ -35,7 +35,10 @@
       <SelectorJornada/>
 
       <div class="columns">
-          <div class="column is-11"></div>
+          <div class="column is-10"></div>
+          <div class="column is-1">
+            <button class="button" @click="verificarChat()">Chat</button>
+          </div>
           <div class="column is-1">
             <button class="button is-light-usach" @click="modificarModal" >Ayuda</button>
           </div>
@@ -111,6 +114,9 @@
     <div v-else-if="verMinuta">
       <RevisarMinuta :id-bitacora="idMinuta" @cerrar="verCerradas"/>
     </div>
+    <div v-else-if="verChatGrupal">
+      <ChatGrupal />
+    </div>
 
   </div>
 </template>
@@ -126,6 +132,7 @@ import Comentar from '@/components/comentarios/ComentarMinuta.vue'
 import Respuestas from '@/components/comentarios/RespuestasMinuta.vue'
 import SelectorJornada from '@/components/SelectorJornada.vue'
 import RevisarMinuta from '@/components/comentarios/RevisarMinuta.vue'
+import ChatGrupal from '@/components/ChatGrupal.vue'
 
 export default {
   name: 'Stakeholder',
@@ -134,7 +141,8 @@ export default {
     Comentar,
     Respuestas,
     SelectorJornada,
-    RevisarMinuta
+    RevisarMinuta,
+    ChatGrupal
   },
   data () {
     return {
@@ -146,13 +154,18 @@ export default {
       verRevision: false,
       verRespuestas: false,
       verMinuta: false,
+      verChatGrupal: false,
       listaGrupos: [],
       grupoActual: 0,
       grupoSeleccionado: {},
       verSelectorGrupo: true,
       tableroStk: 0,
       help: false,
-      faqs_open: []
+      faqs_open: [],
+      chat: {
+        id: 0,
+        grupo_id: 0
+      }
     }
   },
   computed: {
@@ -270,6 +283,24 @@ export default {
         console.log(e)
       }
     },
+    async verificarChat () {
+      try {
+        const response = await axios.get(this.apiUrl + '/chats/' + this.grupo.id, { headers: Auth.authHeader() })
+        const chat = response.data
+        if (chat.length === 0) {
+          const nuevoChat = {
+            grupo_id: this.grupo.id
+          }
+          await axios.post(this.apiUrl + '/chats/crear_grupo', nuevoChat, { headers: Auth.postHeader() })
+        } else {
+          this.chat.id = chat.id
+          this.chat.grupo_id = chat.grupo_id
+        }
+        this.abrirChat()
+      } catch {
+        console.log('No fue posible obtener el chat')
+      }
+    },
     nombreCompleto: function (usuario) {
       return Funciones.nombreCompleto(usuario)
     },
@@ -303,6 +334,13 @@ export default {
     modificarArray: function (element) {
       console.log(element)
       this.faqs_open.push(element)
+    },
+    abrirChat: function () {
+      if (this.verChatGrupal === false) {
+        this.verChatGrupal = true
+      } else {
+        this.verChatGrupal = false
+      }
     }
   },
   watch: {
