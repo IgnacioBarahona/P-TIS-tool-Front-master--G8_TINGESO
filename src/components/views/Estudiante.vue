@@ -43,9 +43,9 @@
 
         <div class="columns is-gapless">
           <div class="column is-8"></div>
-          <!--<div class="column is-1">
-            <button class="button" @click="abrirChat">Chat</button>
-          </div>-->
+          <div class="column is-1">
+            <button class="button" @click="verificarChat()">Chat</button>
+          </div>
           <div class="column is-1">
             <button class="button is-light-usach" @click="modificarModal">Ayuda</button>
           </div>
@@ -177,7 +177,11 @@ export default {
       tableroEst: 0,
       bitacoraAvance: {},
       revisionEstado: '',
-      faqs_open: []
+      faqs_open: [],
+      chat: {
+        id: 0,
+        grupo_id: 0
+      }
     }
   },
   computed: {
@@ -267,6 +271,24 @@ export default {
         this.$store.commit('setFaqs', response.data)
       } catch {
         console.log('No fue posible obtener las faqs')
+      }
+    },
+    async verificarChat () {
+      try {
+        const response = await axios.get(this.apiUrl + '/chats/' + this.estudiante.grupo_id, { headers: Auth.authHeader() })
+        const chat = response.data
+        if (chat.length === 0) {
+          const nuevoChat = {
+            grupo_id: this.estudiante.grupo_id
+          }
+          await axios.post(this.apiUrl + '/chats/crear_grupo', nuevoChat, { headers: Auth.postHeader() })
+        } else {
+          this.chat.id = chat.id
+          this.chat.grupo_id = chat.grupo_id
+        }
+        this.abrirChat()
+      } catch {
+        console.log('No fue posible obtener el chat')
       }
     },
     cambiarTab: function () {
