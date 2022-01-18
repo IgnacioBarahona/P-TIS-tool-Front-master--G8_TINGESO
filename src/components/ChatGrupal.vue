@@ -12,7 +12,7 @@
           </span>
         </div>
       </header>
-      <div class="card-content" style="background-color:#F9F9F9; overflow-y: scroll;">
+      <div class="card-content" style="background-color:#F9F9F9; overflow-y: scroll; max-height: 550px">
         <!--Mostrar mensajes-->
         <ul v-for="mensajeExistente in mensajes" :key="mensajeExistente.id">
           <!--Mensajes de otros usuarios-->
@@ -69,7 +69,7 @@ export default {
       mensajes: [],
       texto: '',
       fecha: {},
-      grupo: {
+      grupoActual: {
         id: 0,
         nombre: '',
         proyecto: ''
@@ -86,27 +86,34 @@ export default {
     }
   },
   computed: {
-    ...mapState(['apiUrl', 'usuario', 'estudiante', 'grupo', 'faqs'])
+    ...mapState(['apiUrl', 'usuario', 'estudiante', 'grupo', 'faqs', 'stakeholder'])
 
   },
   methods: {
     async obtenerChat () {
       try {
-        const response = await axios.get(this.apiUrl + '/chats/' + this.estudiante.grupo_id, { headers: Auth.authHeader() })
-        const chat = response.data
-        this.chat.id = chat[0].id
-        this.chat.grupo_id = chat[0].grupo_id
+        if (this.usuario.rol_id === 3) {
+          const response = await axios.get(this.apiUrl + '/chats/' + this.estudiante.grupo_id, { headers: Auth.authHeader() })
+          const chat = response.data
+          this.chat.id = chat[0].id
+          this.chat.grupo_id = chat[0].grupo_id
+        } else {
+          const response = await axios.get(this.apiUrl + '/chats/' + this.grupo.id, { headers: Auth.authHeader() })
+          const chat = response.data
+          this.chat.id = chat[0].id
+          this.chat.grupo_id = chat[0].grupo_id
+        }
       } catch {
         console.log('No fue posible obtener el chat')
       }
     },
     async obtenerGrupo () {
       try {
-        const response = await axios.get(this.apiUrl + '/grupos/' + this.estudiante.grupo_id, { headers: Auth.authHeader() })
+        const response = await axios.get(this.apiUrl + '/grupos/' + this.grupo.id, { headers: Auth.authHeader() })
         const grupo = response.data
-        this.grupo.id = grupo.id
-        this.grupo.nombre = grupo.nombre
-        this.grupo.proyecto = grupo.proyecto
+        this.grupoActual.id = grupo.id
+        this.grupoActual.nombre = grupo.nombre
+        this.grupoActual.proyecto = grupo.proyecto
         this.estudiantes = grupo.estudiantes
         this.stakeholders = grupo.stakeholders
       } catch {
@@ -115,7 +122,7 @@ export default {
     },
     async obtenerMensajes () {
       try {
-        const response = await axios.get(this.apiUrl + '/mensajes/' + this.estudiante.grupo_id, { headers: Auth.authHeader() })
+        const response = await axios.get(this.apiUrl + '/mensajes/' + this.grupo.id, { headers: Auth.authHeader() })
         const mensajes = response.data
         this.mensajes = mensajes
       } catch {
@@ -131,7 +138,7 @@ export default {
             usuario_id: this.usuario.id
           }
           await axios.post(this.apiUrl + '/mensajes', nuevoMensaje, { headers: Auth.postHeader() })
-          this.mensajes.push(nuevoMensaje)
+          this.obtenerMensajes()
         } catch {
           console.log('No se ha obtenido crear el mensaje')
         }
@@ -155,7 +162,9 @@ export default {
       }
     },
     convertTZ: function (date) {
-      return new Date((typeof date === 'string' ? new Date(date) : date).toLocaleString('en-US', { timeZone: 'America/Santiago' }))
+      if (typeof date !== 'undefined') {
+        return new Date((typeof date === 'string' ? new Date(date) : date).toLocaleString('en-US', { timeZone: 'America/Santiago' }))
+      }
     },
     darFormatoFecha: function (fecha) {
       var fechaConvertida = this.convertTZ(fecha)
