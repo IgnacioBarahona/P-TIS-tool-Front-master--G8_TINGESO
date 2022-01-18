@@ -37,7 +37,7 @@
       <div class="columns">
           <div class="column is-10"></div>
           <div class="column is-1">
-            <button class="button" @click="verificarChat()">Chat</button>
+            <button class="button" v-if="grupo.nombre != 'SG'" @click="verificarChat()">Chat</button>
           </div>
           <div class="column is-1">
             <button class="button is-light-usach" @click="modificarModal" >Ayuda</button>
@@ -99,8 +99,9 @@
         </div>
         <hr>
       </div>
-
-      <Tablero :contador="tableroStk" :tarjeta="nombreTab" @revision="establecerRevision" @respuestas="revisarRespuestas" @ver-minuta="mostrarMinuta"/>
+      <div v-if="!verChatGrupal">
+        <Tablero :contador="tableroStk" :tarjeta="nombreTab" @revision="establecerRevision" @respuestas="revisarRespuestas" @ver-minuta="mostrarMinuta"/>
+      </div>
     </div>
 
     <div v-else-if="verRevision">
@@ -114,7 +115,7 @@
     <div v-else-if="verMinuta">
       <RevisarMinuta :id-bitacora="idMinuta" @cerrar="verCerradas"/>
     </div>
-    <div v-else-if="verChatGrupal">
+    <div v-if="verChatGrupal">
       <ChatGrupal />
     </div>
 

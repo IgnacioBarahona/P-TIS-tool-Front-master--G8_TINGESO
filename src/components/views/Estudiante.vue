@@ -44,7 +44,7 @@
         <div class="columns is-gapless">
           <div class="column is-8"></div>
           <div class="column is-1">
-            <button class="button" @click="verificarChat()">Chat</button>
+            <button class="button" v-if="grupo.nombre != 'SG'" @click="verificarChat()">Chat</button>
           </div>
           <div class="column is-1">
             <button class="button is-light-usach" @click="modificarModal">Ayuda</button>
@@ -82,9 +82,9 @@
           </div>
           <br>
         </div>
-
-        <Tablero :seleccionado="valorActual" :contador="tableroEst" @cambiar="cambiarTab" @bitacora="establecerBitacora" @revision="establecerRevision" @comentarios="revisarComentarios" @respuestas="revisarRespuestas" @emitir="nuevaVersion" @avance="editarAvance" @revisar-avance="revisarAvance" @ver-minuta="mostrarMinuta"/>
-
+        <div v-if="!verChatGrupal">
+          <Tablero :seleccionado="valorActual" :contador="tableroEst" @cambiar="cambiarTab" @bitacora="establecerBitacora" @revision="establecerRevision" @comentarios="revisarComentarios" @respuestas="revisarRespuestas" @emitir="nuevaVersion" @avance="editarAvance" @revisar-avance="revisarAvance" @ver-minuta="mostrarMinuta"/>
+        </div>
       </div>
 
     </div>
@@ -397,6 +397,7 @@ export default {
     abrirChat: function () {
       if (this.verChatGrupal === false) {
         this.verChatGrupal = true
+        this.seleccionarMinuta = false
       } else {
         this.verChatGrupal = false
       }
