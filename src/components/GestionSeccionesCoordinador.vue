@@ -6,7 +6,7 @@
       <div class="column is-10"></div>
       <div class="column is-2" v-if="verFormulario"></div>
       <div class="column is-2" v-else>
-        <button class="button is-info-usach" @click="agregarSeccion">Agregar Seccion</button>
+        <button class="button is-info-usach" @click="agregarSeccion">Agregar Sección</button>
       </div>
     </div>
 
@@ -77,7 +77,7 @@
             <thead>
               <tr class="has-background-light">
                 <th scope="col" class="has-text-centered">N°</th>
-                <th scope="col" class="has-text-centered">Codigo</th>
+                <th scope="col" class="has-text-centered">Código</th>
                 <th scope="col" class="has-text-centered">Curso</th>
                 <th socpe="col" class="has-text-centered">Jornada</th>
                 <th socpe="col" class="has-text-centered">Semestre</th>

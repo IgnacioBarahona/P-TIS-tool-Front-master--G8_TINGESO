@@ -105,7 +105,7 @@
                 <div class="column">
                     <div class="select">
                       <select class="is-hovered" v-model="versionSeleccionada">
-                        <option v-for="version in versiones" :key="version" :value="version"> Version {{ version[1] }}</option>
+                        <option v-for="version in versiones" :key="version" :value="version"> Versión {{ version[1] }}</option>
                       </select>
                     </div>
                 </div>
